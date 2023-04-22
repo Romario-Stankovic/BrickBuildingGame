@@ -7,23 +7,22 @@ import rs.ac.singidunum.components.Camera;
 import rs.ac.singidunum.components.GameObject;
 import rs.ac.singidunum.components.Mesh;
 import rs.ac.singidunum.components.Skybox;
-import rs.ac.singidunum.interfaces.IRenderable;
 import rs.ac.singidunum.scripts.MouseLook;
 import rs.ac.singidunum.scripts.RotateCube;
 import rs.ac.singidunum.util.ModelLoader;
 import rs.ac.singidunum.util.TextureLoader;
 import rs.ac.singidunum.util.Vector3;
 
-
 public class Game implements GLEventListener {
 
     private long lastTimestamp;
-    private boolean mouseLocked;
     private Camera mainCamera;
+
+    private GameObject scene;
 
     public Game() {
         lastTimestamp = System.currentTimeMillis();
-        mouseLocked = true;
+        scene = new GameObject();
     }
 
     @Override
@@ -32,18 +31,12 @@ public class Game implements GLEventListener {
         double delta = (currentTimestamp - lastTimestamp) / 1000d;
         lastTimestamp = currentTimestamp;
 
-        for(GameObject go : GameObject.getGameObjects()) {
-            go.update(delta);
-        }
+        scene.update(delta);
 
         mainCamera.render(drawable);
 
         // Render all gameObjects and subGameObjects
-        for(GameObject go : GameObject.getGameObjects()) {
-            if (go.getComponent(IRenderable.class) != null){
-                go.getComponent(IRenderable.class).render(drawable);
-            }
-        }
+        scene.render(drawable);
 
     }
 
@@ -59,6 +52,7 @@ public class Game implements GLEventListener {
         mainCamera = camera.addComponent(new Camera());
         camera.addComponent(new Skybox()).setTexture(TextureLoader.loadTexture("/textures/skybox.png"));
         camera.addComponent(new MouseLook());
+        camera.setParent(scene);
 
         GameObject cube = new GameObject();
         Mesh mesh = ModelLoader.loadModel("/models/cube.obj");
@@ -66,6 +60,7 @@ public class Game implements GLEventListener {
         cube.addComponent(mesh);
         cube.getTransform().setPosition(new Vector3(0, 0, -5));
         cube.addComponent(new RotateCube());
+        cube.setParent(scene);
 
         GameObject cube2 = new GameObject();
         Mesh mesh2 = ModelLoader.loadModel("/models/cube.obj");
@@ -73,10 +68,9 @@ public class Game implements GLEventListener {
         cube2.addComponent(mesh2);
         cube2.getTransform().setPosition(new Vector3(-5, 0, -10));
         cube2.getTransform().setScale(new Vector3(0.5, 0.5, 0.5));
+        cube2.setParent(cube);
 
-        for(GameObject go : GameObject.getGameObjects()) {
-            go.start();
-        }
+        scene.start();
 
     }
 

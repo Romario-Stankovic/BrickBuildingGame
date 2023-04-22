@@ -60,6 +60,7 @@ public class Camera extends Behavior {
         gl.glLoadIdentity();
         glu.gluPerspective(fov, aspect, near, far);
 
+        //TODO: Fix this to work with the new GameObject rendering system
         gl.glPushMatrix();
             gl.glMatrixMode(GL2.GL_MODELVIEW);
             gl.glLoadIdentity();

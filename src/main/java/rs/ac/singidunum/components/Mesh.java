@@ -56,32 +56,25 @@ public class Mesh extends Behavior implements IRenderable {
             texture.bind(gl);
         }
 
-        gl.glMatrixMode(GL2.GL_MODELVIEW);
-        gl.glPushMatrix();
-            gl.glTranslated(getTransform().getPosition().getX(), getTransform().getPosition().getY(), getTransform().getPosition().getZ());
-            gl.glRotated(getTransform().getRotation().getX(), 1, 0, 0);
-            gl.glRotated(getTransform().getRotation().getY(), 0, 1, 0);
-            gl.glRotated(getTransform().getRotation().getZ(), 0, 0, 1);
-            gl.glScaled(getTransform().getScale().getX(), getTransform().getScale().getY(), getTransform().getScale().getZ());
-            gl.glBegin(GL2.GL_TRIANGLES);
-            for(List<Vector3> face : faces) {
-                    for(int i = 0; i < 3; i++) {
-                        // Check if the face has a UV component
-                        if(face.get(i).getY() >= 0) {
-                            gl.glTexCoord2d(uvs.get((int) face.get(i).getY()).getX(), uvs.get((int) face.get(i).getY()).getY());
-                        }
-
-                        // Check if the face has a normal component
-                        if(face.get(i).getZ() >= 0) {
-                            gl.glNormal3d(normals.get((int) face.get(i).getZ()).getX(), normals.get((int) face.get(i).getZ()).getY(), normals.get((int) face.get(i).getZ()).getZ());
-                        }
-
-                        // Render the vertex
-                        gl.glVertex3d(vertices.get((int) face.get(i).getX()).getX(), vertices.get((int) face.get(i).getX()).getY(), vertices.get((int) face.get(i).getX()).getZ());
+        gl.glBegin(GL2.GL_TRIANGLES);
+        for(List<Vector3> face : faces) {
+                for(int i = 0; i < 3; i++) {
+                    // Check if the face has a UV component
+                    if(face.get(i).getY() >= 0) {
+                        gl.glTexCoord2d(uvs.get((int) face.get(i).getY()).getX(), uvs.get((int) face.get(i).getY()).getY());
                     }
-            }
-            gl.glEnd();
-        gl.glPopMatrix();
+
+                    // Check if the face has a normal component
+                    if(face.get(i).getZ() >= 0) {
+                        gl.glNormal3d(normals.get((int) face.get(i).getZ()).getX(), normals.get((int) face.get(i).getZ()).getY(), normals.get((int) face.get(i).getZ()).getZ());
+                    }
+
+                    // Render the vertex
+                    gl.glVertex3d(vertices.get((int) face.get(i).getX()).getX(), vertices.get((int) face.get(i).getX()).getY(), vertices.get((int) face.get(i).getX()).getZ());
+                }
+        }
+        gl.glEnd();
+
 
         if(texture != null) {
             texture.disable(gl);

@@ -1,10 +1,7 @@
 package rs.ac.singidunum.scripts;
 
-import rs.ac.singidunum.Input;
 import rs.ac.singidunum.components.Behavior;
 import rs.ac.singidunum.util.Vector3;
-
-import java.awt.event.KeyEvent;
 
 public class RotateCube extends Behavior {
 
