@@ -1,6 +1,5 @@
 package rs.ac.singidunum.scripts;
 
-import javafx.scene.input.KeyCode;
 import rs.ac.singidunum.Input;
 import rs.ac.singidunum.components.Behavior;
 import rs.ac.singidunum.util.Vector3;
@@ -22,7 +21,6 @@ public class MouseLook extends Behavior {
 
     @Override
     public void update(double delta) {
-
         int x = Input.getMouseX();
         int y = Input.getMouseY();
         int dx = x - lastX;

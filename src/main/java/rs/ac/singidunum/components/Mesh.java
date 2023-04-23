@@ -3,18 +3,16 @@ package rs.ac.singidunum.components;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.util.texture.Texture;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rs.ac.singidunum.Game;
 import rs.ac.singidunum.interfaces.IRenderable;
-import rs.ac.singidunum.util.TextureLoader;
 import rs.ac.singidunum.util.Vector2;
 import rs.ac.singidunum.util.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Stack;
 
 public class Mesh extends Behavior implements IRenderable {
     @Getter
@@ -30,11 +28,14 @@ public class Mesh extends Behavior implements IRenderable {
     @Setter
     private Texture texture;
 
+    Stack<Transform> transforms;
+
     public Mesh() {
         vertices = new ArrayList<>();
         normals = new ArrayList<>();
         uvs = new ArrayList<>();
         faces = new ArrayList<>();
+        transforms = new Stack<>();
     }
 
     @Override
@@ -44,16 +45,36 @@ public class Mesh extends Behavior implements IRenderable {
 
     @Override
     public void update(double delta) {
-
+        this.render(Game.getDrawable());
     }
 
     @Override
     public void render(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
 
+        // Get all transforms from the parent GameObjects
+        GameObject current = this.getGameObject();
+        while(current != null) {
+            transforms.push(current.getTransform());
+            current = current.getParent();
+        }
+        // Save the size of the stack
+        int stackSize = transforms.size();
+
+        // Render the mesh
         if(texture != null) {
             texture.enable(gl);
             texture.bind(gl);
+        }
+
+        while(!transforms.empty()) {
+            gl.glPushMatrix();
+            Transform transform = transforms.pop();
+            gl.glTranslated(transform.getPosition().getX(), transform.getPosition().getY(), transform.getPosition().getZ());
+            gl.glRotated(transform.getRotation().getX(), 1, 0, 0);
+            gl.glRotated(transform.getRotation().getY(), 0, 1, 0);
+            gl.glRotated(transform.getRotation().getZ(), 0, 0, 1);
+            gl.glScaled(transform.getScale().getX(), transform.getScale().getY(), transform.getScale().getZ());
         }
 
         gl.glBegin(GL2.GL_TRIANGLES);
@@ -75,10 +96,15 @@ public class Mesh extends Behavior implements IRenderable {
         }
         gl.glEnd();
 
+        // Pop the matrices off the stack
+        for(int i = 0; i < stackSize; i++) {
+            gl.glPopMatrix();
+        }
 
         if(texture != null) {
             texture.disable(gl);
         }
 
     }
+
 }

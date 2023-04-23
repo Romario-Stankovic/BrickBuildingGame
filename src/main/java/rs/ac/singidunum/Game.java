@@ -3,6 +3,7 @@ package rs.ac.singidunum;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 
+import lombok.Getter;
 import rs.ac.singidunum.components.Camera;
 import rs.ac.singidunum.components.GameObject;
 import rs.ac.singidunum.components.Mesh;
@@ -18,6 +19,9 @@ public class Game implements GLEventListener {
     private long lastTimestamp;
     private Camera mainCamera;
 
+    @Getter
+    private static GLAutoDrawable drawable;
+
     private GameObject scene;
 
     public Game() {
@@ -27,16 +31,15 @@ public class Game implements GLEventListener {
 
     @Override
     public void display(GLAutoDrawable drawable) {
+
+        Game.drawable = drawable;
+
         long currentTimestamp = System.currentTimeMillis();
         double delta = (currentTimestamp - lastTimestamp) / 1000d;
         lastTimestamp = currentTimestamp;
 
+        mainCamera.render();
         scene.update(delta);
-
-        mainCamera.render(drawable);
-
-        // Render all gameObjects and subGameObjects
-        scene.render(drawable);
 
     }
 
@@ -48,17 +51,21 @@ public class Game implements GLEventListener {
     @Override
     public void init(GLAutoDrawable drawable) {
 
+        GameObject pivot = new GameObject();
+        pivot.setParent(scene);
+        pivot.addComponent(new MouseLook());
+
         GameObject camera = new GameObject();
         mainCamera = camera.addComponent(new Camera());
         camera.addComponent(new Skybox()).setTexture(TextureLoader.loadTexture("/textures/skybox.png"));
-        camera.addComponent(new MouseLook());
-        camera.setParent(scene);
+        camera.getTransform().setPosition(new Vector3(0, 0, -10));
+        camera.setParent(pivot);
 
         GameObject cube = new GameObject();
         Mesh mesh = ModelLoader.loadModel("/models/cube.obj");
         mesh.setTexture(TextureLoader.loadTexture("/textures/cube.png"));
         cube.addComponent(mesh);
-        cube.getTransform().setPosition(new Vector3(0, 0, -5));
+        cube.getTransform().setPosition(new Vector3(0, 0, 0));
         cube.addComponent(new RotateCube());
         cube.setParent(scene);
 
@@ -66,7 +73,7 @@ public class Game implements GLEventListener {
         Mesh mesh2 = ModelLoader.loadModel("/models/cube.obj");
         mesh2.setTexture(TextureLoader.loadTexture("/textures/cube.png"));
         cube2.addComponent(mesh2);
-        cube2.getTransform().setPosition(new Vector3(-5, 0, -10));
+        cube2.getTransform().setPosition(new Vector3(-2, 0, -2));
         cube2.getTransform().setScale(new Vector3(0.5, 0.5, 0.5));
         cube2.setParent(cube);
 
