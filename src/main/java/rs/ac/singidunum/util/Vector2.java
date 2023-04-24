@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter()
 public class Vector2 {
 
-    private double x;
-    private double y;
+    protected double x;
+    protected double y;
 
     public Vector2(double x, double y) {
         this.x = x;

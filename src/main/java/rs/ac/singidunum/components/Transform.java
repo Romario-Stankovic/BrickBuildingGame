@@ -15,7 +15,11 @@ public class Transform {
     private Vector3 rotation;
     private Vector3 scale;
 
-    public Transform() {
+    @Getter
+    private GameObject gameObject;
+
+    public Transform(GameObject gameObject) {
+        this.gameObject = gameObject;
         this.position = new Vector3(0, 0, 0);
         this.rotation = new Vector3(0, 0, 0);
         this.scale = new Vector3(1, 1, 1);
@@ -23,6 +27,15 @@ public class Transform {
 
     public void rotate(Vector3 rotation) {
         this.rotation.add(rotation);
+    }
+
+    @Override
+    public String toString() {
+        return "Transform{" +
+                "position=" + position +
+                ", rotation=" + rotation +
+                ", scale=" + scale +
+                '}';
     }
 
 }

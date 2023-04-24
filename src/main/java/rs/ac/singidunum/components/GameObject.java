@@ -7,6 +7,7 @@ import rs.ac.singidunum.interfaces.IRenderable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameObject extends Behavior {
 
@@ -22,10 +23,10 @@ public class GameObject extends Behavior {
     private List<GameObject> children;
 
     public GameObject() {
-        this.transform = new Transform();
-        this.components = new ArrayList<>();
+        this.transform = new Transform(this);
+        this.components = new CopyOnWriteArrayList<>();
         parent = null;
-        children = new ArrayList<>();
+        children = new CopyOnWriteArrayList<>();
     }
 
     @Override
@@ -62,6 +63,10 @@ public class GameObject extends Behavior {
             }
         }
         return null;
+    }
+    
+    public void removeComponent(Behavior component) {
+        this.components.remove(component);
     }
 
     public void setParent(GameObject parent) {
