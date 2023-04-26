@@ -1,13 +1,11 @@
 package rs.ac.singidunum;
 
+import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 
 import lombok.Getter;
-import rs.ac.singidunum.components.Camera;
-import rs.ac.singidunum.components.GameObject;
-import rs.ac.singidunum.components.Mesh;
-import rs.ac.singidunum.components.Skybox;
+import rs.ac.singidunum.components.*;
 import rs.ac.singidunum.scripts.MouseLook;
 import rs.ac.singidunum.scripts.RotateCube;
 import rs.ac.singidunum.util.ModelLoader;
@@ -33,13 +31,15 @@ public class Game implements GLEventListener {
     public void display(GLAutoDrawable drawable) {
 
         Game.drawable = drawable;
+        GL2 gl = drawable.getGL().getGL2();
 
         long currentTimestamp = System.currentTimeMillis();
         double delta = (currentTimestamp - lastTimestamp) / 1000d;
         lastTimestamp = currentTimestamp;
 
-        mainCamera.render();
-        scene.update(delta);
+        mainCamera.render(() -> {
+            scene.update(delta);
+        });
 
     }
 
@@ -66,7 +66,7 @@ public class Game implements GLEventListener {
         mesh.setTexture(TextureLoader.loadTexture("/textures/cube.png"));
         cube.addComponent(mesh);
         cube.getTransform().setPosition(new Vector3(0, 0, 0));
-        cube.addComponent(new RotateCube());
+        //cube.addComponent(new RotateCube());
         cube.setParent(scene);
 
         GameObject cube2 = new GameObject();

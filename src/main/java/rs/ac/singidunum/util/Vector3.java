@@ -1,8 +1,6 @@
 package rs.ac.singidunum.util;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -20,14 +18,16 @@ public class Vector3 extends Vector2{
         this.z = z;
     }
 
-    public void add(Vector3 other) {
+    public Vector3 add(Vector3 other) {
         super.add(other);
         this.z += other.z;
+        return this;
     }
 
-    public void mul(double scalar) {
+    public Vector3 mul(double scalar) {
         super.mul(scalar);
         this.z *= scalar;
+        return this;
     }
 
     @Override

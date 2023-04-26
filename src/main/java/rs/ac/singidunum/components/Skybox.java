@@ -46,6 +46,8 @@ public class Skybox extends Behavior implements IRenderable {
         texture.enable(gl);
         texture.bind(gl);
 
+        //TODO: Remove glLoadIdentity() and use the camera's transform instead.
+
         gl.glPushMatrix();
             gl.glLoadIdentity();
 

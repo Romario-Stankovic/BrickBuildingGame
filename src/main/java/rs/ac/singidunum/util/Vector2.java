@@ -1,8 +1,6 @@
 package rs.ac.singidunum.util;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter()
@@ -22,14 +20,16 @@ public class Vector2 {
         this.y = 0;
     }
 
-    public void add(Vector2 other) {
+    public Vector2 add(Vector2 other) {
         this.x += other.x;
         this.y += other.y;
+        return this;
     }
 
-    public void mul(double scalar) {
+    public Vector2 mul(double scalar) {
         this.x *= scalar;
         this.y *= scalar;
+        return this;
     }
 
 }

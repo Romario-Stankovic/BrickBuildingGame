@@ -1,11 +1,8 @@
 package rs.ac.singidunum.components;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rs.ac.singidunum.util.Vector3;
-
-import java.util.List;
 
 @Getter()
 @Setter()
@@ -28,6 +25,10 @@ public class Transform {
     public void rotate(Vector3 rotation) {
         this.rotation.add(rotation);
     }
+
+
+    //TODO: Implement forward(), right() and up() methods
+    // to return the direction vectors of the transform
 
     @Override
     public String toString() {

@@ -7,13 +7,15 @@ import com.jogamp.opengl.glu.GLU;
 import lombok.Getter;
 import lombok.Setter;
 import rs.ac.singidunum.Game;
+import rs.ac.singidunum.interfaces.OnRender;
 import rs.ac.singidunum.util.Color;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 public class Camera extends Behavior {
 
-    private GLU glu;
+    private final GLU glu;
 
     @Getter
     @Setter
@@ -31,14 +33,14 @@ public class Camera extends Behavior {
     @Setter
     private double fov = 45;
 
-    Stack<Transform> transforms;
+    Queue<Transform> transforms;
 
     public Camera() {
         glu = new GLU();
         near = 0.1;
         far = 1000;
         clearColor = new Color(131, 168, 197);
-        transforms = new Stack<>();
+        transforms = new ArrayDeque<>();
     }
 
     @Override
@@ -51,11 +53,18 @@ public class Camera extends Behavior {
 
     }
 
-    public void render() {
+    public void render(OnRender callback) {
         GLAutoDrawable drawable = Game.getDrawable();
         GL2 gl = drawable.getGL().getGL2();
 
         double aspect = (double)drawable.getSurfaceWidth() / (double)drawable.getSurfaceHeight();
+
+        GameObject current = getGameObject();
+        while (current != null) {
+            transforms.add(current.getTransform());
+            current = current.getParent();
+        }
+        int stackSize = transforms.size();
 
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
         gl.glEnable(GL2.GL_DEPTH_TEST);
@@ -66,37 +75,32 @@ public class Camera extends Behavior {
         gl.glLoadIdentity();
         glu.gluPerspective(fov, aspect, near, far);
 
-        GameObject current = getGameObject();
-        while (current != null) {
-            transforms.add(current.getTransform());
-            current = current.getParent();
-        }
+        gl.glMatrixMode(GL2.GL_MODELVIEW);
+        gl.glLoadIdentity();
 
-        int stackSize = transforms.size();
+        gl.glPushMatrix();
+        glu.gluLookAt(
+                0, 0, 0,
+                    0, 0, -1,
+                    0, 1, 0);
 
-        // TODO: Fix this to work with the new GameObject rendering system
-        // Test why is the pivot at the same position as the camera on start
-        // Even though the camera is at 0, 0, -10 and the pivot is at 0, 0, 0
-        while(!transforms.isEmpty()) {
+        while (!transforms.isEmpty()) {
+            Transform transform = transforms.remove();
             gl.glPushMatrix();
-            Transform transform = transforms.pop();
+                gl.glRotated(transform.getRotation().getX(), 1, 0, 0);
+                gl.glRotated(transform.getRotation().getY(), 0, 1, 0);
+                gl.glRotated(transform.getRotation().getZ(), 0, 0, 1);
 
-            gl.glTranslated(transform.getPosition().getX(), transform.getPosition().getY(), transform.getPosition().getZ());
-
-            gl.glRotated(transform.getRotation().getX(), 1, 0, 0);
-            gl.glRotated(transform.getRotation().getY(), 0, 1, 0);
-            gl.glRotated(transform.getRotation().getZ(), 0, 0, 1);
-
-            if(transform.equals(getTransform())) {
-                gl.glMatrixMode(GL2.GL_MODELVIEW);
-                gl.glLoadIdentity();
-            }
-
+                gl.glTranslated(transform.getPosition().getX(), transform.getPosition().getY(), transform.getPosition().getZ());
         }
 
-        for(int i = 0; i < stackSize; i++) {
+        callback.onRender();
+
+        for(int i=0; i<stackSize; i++) {
             gl.glPopMatrix();
         }
-        //gl.glLoadIdentity();
+
+        gl.glPopMatrix();
+
     }
 }
