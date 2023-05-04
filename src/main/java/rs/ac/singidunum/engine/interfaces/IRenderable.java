@@ -1,4 +1,4 @@
-package rs.ac.singidunum.interfaces;
+package rs.ac.singidunum.engine.interfaces;
 
 import com.jogamp.opengl.GLAutoDrawable;
 

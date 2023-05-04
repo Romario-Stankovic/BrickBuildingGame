@@ -9,6 +9,10 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
+import rs.ac.singidunum.engine.Engine;
+import rs.ac.singidunum.engine.Input;
+import rs.ac.singidunum.engine.interfaces.IGame;
+import rs.ac.singidunum.game.Game;
 
 public class Main 
 {
@@ -30,10 +34,14 @@ public class Main
         animator = new FPSAnimator(canvas, FPS);
 
         // Create a new game instance
-        Game game = new Game();
+        Engine engine = new Engine();
+
+        IGame game = new Game();
+
+        engine.register(game);
 
         // Add the game to the canvas
-        canvas.addGLEventListener(game);
+        canvas.addGLEventListener(engine);
         canvas.addKeyListener(Input.instance);
         canvas.addMouseListener(Input.instance);
         canvas.addMouseMotionListener(Input.instance);

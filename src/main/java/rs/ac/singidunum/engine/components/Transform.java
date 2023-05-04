@@ -1,8 +1,8 @@
-package rs.ac.singidunum.components;
+package rs.ac.singidunum.engine.components;
 
 import lombok.Getter;
 import lombok.Setter;
-import rs.ac.singidunum.util.Vector3;
+import rs.ac.singidunum.engine.util.Vector3;
 
 @Getter()
 @Setter()

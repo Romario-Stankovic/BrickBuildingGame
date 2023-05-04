@@ -1,4 +1,4 @@
-package rs.ac.singidunum.util;
+package rs.ac.singidunum.engine.util;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +30,11 @@ public class Vector2 {
         this.x *= scalar;
         this.y *= scalar;
         return this;
+    }
+
+    @Override()
+    public String toString() {
+        return String.format("Vector2(%f, %f)", x, y);
     }
 
 }

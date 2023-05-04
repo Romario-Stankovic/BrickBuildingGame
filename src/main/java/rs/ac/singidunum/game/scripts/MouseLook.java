@@ -1,8 +1,8 @@
-package rs.ac.singidunum.scripts;
+package rs.ac.singidunum.game.scripts;
 
-import rs.ac.singidunum.Input;
-import rs.ac.singidunum.components.Behavior;
-import rs.ac.singidunum.util.Vector3;
+import rs.ac.singidunum.engine.Input;
+import rs.ac.singidunum.engine.components.Behavior;
+import rs.ac.singidunum.engine.util.Vector3;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;

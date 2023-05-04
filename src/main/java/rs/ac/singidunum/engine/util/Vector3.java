@@ -1,4 +1,4 @@
-package rs.ac.singidunum.util;
+package rs.ac.singidunum.engine.util;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +32,7 @@ public class Vector3 extends Vector2{
 
     @Override
     public String toString() {
-        return String.format("Vector3(%f, %f, %f)", getX(), getY(), getZ());
+        return String.format("Vector3(%f, %f, %f)", x, y, z);
     }
 
 }

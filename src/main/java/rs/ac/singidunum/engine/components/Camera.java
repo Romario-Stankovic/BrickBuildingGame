@@ -1,4 +1,4 @@
-package rs.ac.singidunum.components;
+package rs.ac.singidunum.engine.components;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -6,9 +6,9 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
 import lombok.Getter;
 import lombok.Setter;
-import rs.ac.singidunum.Game;
-import rs.ac.singidunum.interfaces.OnRender;
-import rs.ac.singidunum.util.Color;
+import rs.ac.singidunum.engine.Engine;
+import rs.ac.singidunum.engine.util.Color;
+import rs.ac.singidunum.engine.interfaces.OnRenderCallback;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -53,8 +53,8 @@ public class Camera extends Behavior {
 
     }
 
-    public void render(OnRender callback) {
-        GLAutoDrawable drawable = Game.getDrawable();
+    public void render(OnRenderCallback callback) {
+        GLAutoDrawable drawable = Engine.getDrawable();
         GL2 gl = drawable.getGL().getGL2();
 
         double aspect = (double)drawable.getSurfaceWidth() / (double)drawable.getSurfaceHeight();
@@ -94,7 +94,7 @@ public class Camera extends Behavior {
                 gl.glTranslated(transform.getPosition().getX(), transform.getPosition().getY(), transform.getPosition().getZ());
         }
 
-        callback.onRender();
+        callback.callback();
 
         for(int i=0; i<stackSize; i++) {
             gl.glPopMatrix();

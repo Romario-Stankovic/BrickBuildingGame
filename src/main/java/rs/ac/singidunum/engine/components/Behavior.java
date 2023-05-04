@@ -1,25 +1,18 @@
-package rs.ac.singidunum.components;
+package rs.ac.singidunum.engine.components;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import lombok.Getter;
 
 public abstract class Behavior {
 
+    @Getter
     private GameObject gameObject;
 
+    @Getter
     private Transform transform;
 
     public void setGameObject(GameObject gameObject) {
         this.gameObject = gameObject;
         this.transform = gameObject.getTransform();
-    }
-
-    public GameObject getGameObject() {
-        return gameObject;
-    }
-
-    public Transform getTransform() {
-        return transform;
     }
 
     public Behavior() {};

@@ -1,11 +1,7 @@
-package rs.ac.singidunum.components;
+package rs.ac.singidunum.engine.components;
 
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GLAutoDrawable;
 import lombok.Getter;
-import rs.ac.singidunum.interfaces.IRenderable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

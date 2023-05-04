@@ -1,4 +1,4 @@
-package rs.ac.singidunum.components;
+package rs.ac.singidunum.engine.components;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -6,8 +6,8 @@ import com.jogamp.opengl.util.texture.Texture;
 
 import lombok.Getter;
 import lombok.Setter;
-import rs.ac.singidunum.Game;
-import rs.ac.singidunum.interfaces.IRenderable;
+import rs.ac.singidunum.engine.Engine;
+import rs.ac.singidunum.engine.interfaces.IRenderable;
 
 public class Skybox extends Behavior implements IRenderable {
 
@@ -31,7 +31,7 @@ public class Skybox extends Behavior implements IRenderable {
 
     @Override
     public void update(double delta) {
-        this.render(Game.getDrawable());
+        this.render(Engine.getDrawable());
     }
 
     @Override
@@ -49,7 +49,7 @@ public class Skybox extends Behavior implements IRenderable {
         //TODO: Remove glLoadIdentity() and use the camera's transform instead.
 
         gl.glPushMatrix();
-            gl.glLoadIdentity();
+            //gl.glLoadIdentity();
 
             //TODO: Make this the same distance as the far plane.
             // without clipping

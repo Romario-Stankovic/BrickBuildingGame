@@ -1,28 +1,24 @@
-package rs.ac.singidunum.components;
+package rs.ac.singidunum.engine.components;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.util.texture.Texture;
 import lombok.Getter;
 import lombok.Setter;
-import rs.ac.singidunum.Game;
-import rs.ac.singidunum.interfaces.IRenderable;
-import rs.ac.singidunum.util.Vector2;
-import rs.ac.singidunum.util.Vector3;
+import rs.ac.singidunum.engine.Engine;
+import rs.ac.singidunum.engine.interfaces.IRenderable;
+import rs.ac.singidunum.engine.util.Mesh;
+import rs.ac.singidunum.engine.util.Vector2;
+import rs.ac.singidunum.engine.util.Vector3;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class Mesh extends Behavior implements IRenderable {
+public class MeshRenderer extends Behavior implements IRenderable {
+
     @Getter
-    private List<Vector3> vertices;
-    @Getter
-    private List<Vector3> normals;
-    @Getter
-    private List<Vector2> uvs;
-    @Getter
-    private List<List<Vector3>> faces;
+    @Setter
+    private Mesh mesh;
 
     @Getter
     @Setter
@@ -30,38 +26,34 @@ public class Mesh extends Behavior implements IRenderable {
 
     Stack<Transform> transforms;
 
-    public Mesh() {
-        vertices = new ArrayList<>();
-        normals = new ArrayList<>();
-        uvs = new ArrayList<>();
-        faces = new ArrayList<>();
-        transforms = new Stack<>();
-    }
-
     @Override
     public void start() {
-
+        this.transforms = new Stack<>();
     }
 
     @Override
     public void update(double delta) {
-        this.render(Game.getDrawable());
+        this.render(Engine.getDrawable());
     }
+
 
     @Override
     public void render(GLAutoDrawable drawable) {
+
+        if(this.mesh == null) {
+            return;
+        }
+
         GL2 gl = drawable.getGL().getGL2();
 
-        // Get all transforms from the parent GameObjects
         GameObject current = this.getGameObject();
         while(current != null) {
             transforms.push(current.getTransform());
             current = current.getParent();
         }
-        // Save the size of the stack
+
         int stackSize = transforms.size();
 
-        // Render the mesh
         if(texture != null) {
             texture.enable(gl);
             texture.bind(gl);
@@ -77,22 +69,28 @@ public class Mesh extends Behavior implements IRenderable {
             gl.glScaled(transform.getScale().getX(), transform.getScale().getY(), transform.getScale().getZ());
         }
 
+        List<int[][]> faces = mesh.getFaces();
+        List<Vector3> vertices = mesh.getVertices();
+        List<Vector3> normals = mesh.getNormals();
+        List<Vector2> uvs = mesh.getUvs();
+
         gl.glBegin(GL2.GL_TRIANGLES);
-        for(List<Vector3> face : faces) {
-                for(int i = 0; i < 3; i++) {
-                    // Check if the face has a UV component
-                    if(face.get(i).getY() >= 0) {
-                        gl.glTexCoord2d(uvs.get((int) face.get(i).getY()).getX(), uvs.get((int) face.get(i).getY()).getY());
-                    }
-
-                    // Check if the face has a normal component
-                    if(face.get(i).getZ() >= 0) {
-                        gl.glNormal3d(normals.get((int) face.get(i).getZ()).getX(), normals.get((int) face.get(i).getZ()).getY(), normals.get((int) face.get(i).getZ()).getZ());
-                    }
-
-                    // Render the vertex
-                    gl.glVertex3d(vertices.get((int) face.get(i).getX()).getX(), vertices.get((int) face.get(i).getX()).getY(), vertices.get((int) face.get(i).getX()).getZ());
+        for(int[][] face : faces) {
+            for(int i = 0; i < 3; i++) {
+                // Check if the face has a UV component
+                if(face[i][1] >= 0) {
+                    gl.glTexCoord2d(uvs.get(face[i][1]).getX(), uvs.get(face[i][1]).getY());
                 }
+
+                // Check if the face has a normal component
+
+                if(face[i][2] >= 0) {
+                    gl.glNormal3d(normals.get(face[i][2]).getX(), normals.get(face[i][2]).getY(), normals.get(face[i][2]).getZ());
+                }
+
+                // Render the vertex
+                gl.glVertex3d(vertices.get(face[i][0]).getX(), vertices.get(face[i][0]).getY(), vertices.get(face[i][0]).getZ());
+            }
         }
         gl.glEnd();
 
@@ -106,5 +104,4 @@ public class Mesh extends Behavior implements IRenderable {
         }
 
     }
-
 }

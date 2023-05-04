@@ -1,4 +1,4 @@
-package rs.ac.singidunum.util;
+package rs.ac.singidunum.engine.util;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
