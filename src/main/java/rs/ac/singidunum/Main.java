@@ -5,46 +5,26 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
-import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.opengl.GLProfile;
-import com.jogamp.opengl.awt.GLCanvas;
-import com.jogamp.opengl.util.FPSAnimator;
 import rs.ac.singidunum.engine.Engine;
-import rs.ac.singidunum.engine.Input;
 import rs.ac.singidunum.engine.interfaces.IGame;
 import rs.ac.singidunum.game.Game;
 
 public class Main 
 {
-    private static GLProfile profile;
-    private static GLCapabilities capabilities;
-    private static GLCanvas canvas;
-    private static FPSAnimator animator;
-
     private static final int WINDOW_WIDTH = 1000;
     private static final int WINDOW_HEIGHT = 562;
-    private static final int FPS = 60;
 
     public static void main( String[] args )
     {
-        // Initialize OpenGL
-        profile = GLProfile.getDefault();
-        capabilities = new GLCapabilities(profile);
-        canvas = new GLCanvas(capabilities);
-        animator = new FPSAnimator(canvas, FPS);
 
         // Create a new game instance
         Engine engine = new Engine();
 
+        // Create a new game instance
         IGame game = new Game();
 
+        // Register the game
         engine.register(game);
-
-        // Add the game to the canvas
-        canvas.addGLEventListener(engine);
-        canvas.addKeyListener(Input.instance);
-        canvas.addMouseListener(Input.instance);
-        canvas.addMouseMotionListener(Input.instance);
 
         // Initialize the Menu bar
         JMenuBar menu = new JMenuBar();
@@ -75,19 +55,17 @@ public class Main
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                animator.stop();
+                engine.stop();
             }
         });
 
-        // Make canvas fill the window
-        canvas.setPreferredSize(frame.getSize());
+        // Attach engine canvas to the window
+        engine.attach(frame);
 
-        // Add the canvas to the window and show it
-        frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
 
-        // Start the animation
-        animator.start();
+        // Start the engine
+        engine.start();
     }
 }

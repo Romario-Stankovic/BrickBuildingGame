@@ -32,6 +32,7 @@ public class MouseLook extends Behavior {
             return;
         }
 
+        //TODO: Check why is this inverted?
         if(Input.isKeyDown(KeyEvent.VK_W)) {
             getTransform().getPosition().add(new Vector3(0, 0, speed * delta));
         }

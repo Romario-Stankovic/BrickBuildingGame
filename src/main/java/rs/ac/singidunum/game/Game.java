@@ -12,14 +12,11 @@ import rs.ac.singidunum.engine.util.Vector3;
 import rs.ac.singidunum.game.scripts.MouseLook;
 import rs.ac.singidunum.game.scripts.RotateCube;
 
-import java.awt.*;
-
 public class Game implements IGame {
 
     Camera mainCamera;
 
     GameObject scene;
-
 
     @Override
     public void init() {
@@ -36,24 +33,20 @@ public class Game implements IGame {
         camera.getTransform().setPosition(new Vector3(0, 0, -10));
         camera.setParent(pivot);
 
-        Mesh cubeMesh = ModelLoader.load("/models/cube.obj");
+        GameObject brick = new GameObject();
+        Mesh mesh = ModelLoader.load("/models/brick2x2.obj");
+        MeshRenderer mr = brick.addComponent(new MeshRenderer());
+        mr.setMesh(mesh);
+        brick.getTransform().setPosition(new Vector3(0, 0, 0));
+        brick.addComponent(new RotateCube());
+        brick.setParent(scene);
 
-        GameObject cube = new GameObject();
-        Mesh mesh = ModelLoader.load("/models/cube.obj");
-        MeshRenderer mr = cube.addComponent(new MeshRenderer());
-        mr.setMesh(cubeMesh);
-        mr.setTexture(TextureLoader.loadTexture("/textures/cube.png"));
-        cube.getTransform().setPosition(new Vector3(0, 0, 0));
-        cube.addComponent(new RotateCube());
-        cube.setParent(scene);
-
-        GameObject cube2 = new GameObject();
-        MeshRenderer mr2 = cube2.addComponent(new MeshRenderer());
+        GameObject brick2 = new GameObject();
+        MeshRenderer mr2 = brick2.addComponent(new MeshRenderer());
         mr2.setMesh(mesh);
-        mr2.setTexture(TextureLoader.loadTexture("/textures/cube.png"));
-        cube2.getTransform().setPosition(new Vector3(-2, 0, -2));
-        cube2.getTransform().setScale(new Vector3(0.5, 0.5, 0.5));
-        cube2.setParent(cube);
+        brick2.getTransform().setPosition(new Vector3(-2, 0, -2));
+        brick2.getTransform().setScale(new Vector3(0.5, 0.5, 0.5));
+        brick2.setParent(brick);
     }
 
     @Override

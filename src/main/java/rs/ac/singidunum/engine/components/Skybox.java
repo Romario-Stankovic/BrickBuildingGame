@@ -9,6 +9,8 @@ import lombok.Setter;
 import rs.ac.singidunum.engine.Engine;
 import rs.ac.singidunum.engine.interfaces.IRenderable;
 
+import java.util.Stack;
+
 public class Skybox extends Behavior implements IRenderable {
 
     @Getter
@@ -17,8 +19,11 @@ public class Skybox extends Behavior implements IRenderable {
 
     private Camera camera;
 
+    private Stack<Transform> transforms;
+
     public Skybox() {
         this.texture = null;
+        this.transforms = new Stack<>();
     }
 
     @Override
@@ -43,107 +48,114 @@ public class Skybox extends Behavior implements IRenderable {
 
         GL2 gl = drawable.getGL().getGL2();
 
+        GameObject current = this.getGameObject();
+        while (current != null) {
+            transforms.push(current.getTransform());
+            current = current.getParent();
+        }
+        int stackSize = transforms.size();
+
         texture.enable(gl);
         texture.bind(gl);
+        gl.glTexParameteri(GL2.GL_TEXTURE, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
+        gl.glTexParameteri(GL2.GL_TEXTURE, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
+        gl.glTexParameteri(GL2.GL_TEXTURE, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
+        gl.glTexParameteri(GL2.GL_TEXTURE, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
 
-        //TODO: Remove glLoadIdentity() and use the camera's transform instead.
+        while (!transforms.empty()) {
+            gl.glPushMatrix();
+            Transform transform = transforms.pop();
+            gl.glTranslated(-transform.getPosition().getX(), -transform.getPosition().getY(), -transform.getPosition().getZ());
+        }
 
-        gl.glPushMatrix();
-            //gl.glLoadIdentity();
+        gl.glScaled(camera.getFar() / 2, camera.getFar() / 2, camera.getFar() / 2);
 
-            //TODO: Make this the same distance as the far plane.
-            // without clipping
+        gl.glBegin(GL2.GL_QUADS);
+            // Top face
+            gl.glTexCoord2d(1.0 / 4.0, 2.0 / 3.0);
+            gl.glVertex3d(-1, 1, -1);
 
-            // Scale the skybox half the distance of the far plane.
-            // This ensures that the skybox is always drawn with no clipping.
-            gl.glScaled(camera.getFar() / 2, camera.getFar() / 2, camera.getFar() / 2);
+            gl.glTexCoord2d(1.0 / 4.0, 1.0);
+            gl.glVertex3d(-1, 1, 1);
 
-            // Rotate the skybox based on the camera's rotation.
-            gl.glRotated(getTransform().getRotation().getX(), 1, 0, 0);
-            gl.glRotated(getTransform().getRotation().getY(), 0, 1, 0);
-            gl.glRotated(getTransform().getRotation().getZ(), 0, 0, 1);
+            gl.glTexCoord2d(2.0 / 4.0, 1.0);
+            gl.glVertex3d(1, 1, 1);
 
-            gl.glBegin(GL2.GL_QUADS);
-                // Top face
-                gl.glTexCoord2d(1.0 / 4.0, 2.0 / 3.0);
-                gl.glVertex3d(-1, 1, -1);
+            gl.glTexCoord2d(2.0 / 4.0, 2. / 3.);
+            gl.glVertex3d(1, 1, -1);
 
-                gl.glTexCoord2d(1.0 / 4.0, 1.0);
-                gl.glVertex3d(-1, 1, 1);
+            // Left face
+            gl.glTexCoord2d(0.0, 2.0 / 3.0);
+            gl.glVertex3d(-1, 1, 1);
 
-                gl.glTexCoord2d(2.0 / 4.0, 1.0);
-                gl.glVertex3d(1, 1, 1);
+            gl.glTexCoord2d(0.0, 1.0 / 3.0);
+            gl.glVertex3d(-1, -1, 1);
 
-                gl.glTexCoord2d(2.0 / 4.0, 2. / 3.);
-                gl.glVertex3d(1, 1, -1);
+            gl.glTexCoord2d(1.0 / 4.0, 1.0 / 3.0);
+            gl.glVertex3d(-1, -1, -1);
 
-                // Left face
-                gl.glTexCoord2d(0.0, 2.0 / 3.0);
-                gl.glVertex3d(-1, 1, 1);
+            gl.glTexCoord2d(1.0 / 4.0, 2.0 / 3.0);
+            gl.glVertex3d(-1, 1, -1);
 
-                gl.glTexCoord2d(0.0, 1.0 / 3.0);
-                gl.glVertex3d(-1, -1, 1);
+            // Back face
+            gl.glTexCoord2d(1.0 / 4.0, 2.0 / 3.0);
+            gl.glVertex3d(-1, 1, -1);
 
-                gl.glTexCoord2d(1.0 / 4.0, 1.0 / 3.0);
-                gl.glVertex3d(-1, -1, -1);
+            gl.glTexCoord2d(1.0 / 4.0, 1.0 / 3.0);
+            gl.glVertex3d(-1, -1, -1);
 
-                gl.glTexCoord2d(1.0 / 4.0, 2.0 / 3.0);
-                gl.glVertex3d(-1, 1, -1);
+            gl.glTexCoord2d(2.0 / 4.0, 1.0 / 3.0);
+            gl.glVertex3d(1, -1, -1);
 
-                // Back face
-                gl.glTexCoord2d(1.0 / 4.0, 2.0 / 3.0);
-                gl.glVertex3d(-1, 1, -1);
+            gl.glTexCoord2d(2.0 / 4.0, 2.0 / 3.0);
+            gl.glVertex3d(1, 1, -1);
 
-                gl.glTexCoord2d(1.0 / 4.0, 1.0 / 3.0);
-                gl.glVertex3d(-1, -1, -1);
+            // Right face
+            gl.glTexCoord2d(2.0 / 4.0, 2.0 / 3.0);
+            gl.glVertex3d(1, 1, -1);
 
-                gl.glTexCoord2d(2.0 / 4.0, 1.0 / 3.0);
-                gl.glVertex3d(1, -1, -1);
+            gl.glTexCoord2d(2.0 / 4.0, 1.0 / 3.0);
+            gl.glVertex3d(1, -1, -1);
 
-                gl.glTexCoord2d(2.0 / 4.0, 2.0 / 3.0);
-                gl.glVertex3d(1, 1, -1);
+            gl.glTexCoord2d(3.0 / 4.0, 1.0 / 3.0);
+            gl.glVertex3d(1, -1, 1);
 
-                // Right face
-                gl.glTexCoord2d(2.0 / 4.0, 2.0 / 3.0);
-                gl.glVertex3d(1, 1, -1);
+            gl.glTexCoord2d(3.0 / 4.0, 2.0 / 3.0);
+            gl.glVertex3d(1, 1, 1);
 
-                gl.glTexCoord2d(2.0 / 4.0, 1.0 / 3.0);
-                gl.glVertex3d(1, -1, -1);
+            // Front face
+            gl.glTexCoord2d(3.0 / 4.0, 2.0 / 3.0);
+            gl.glVertex3d(1, 1, 1);
 
-                gl.glTexCoord2d(3.0 / 4.0, 1.0 / 3.0);
-                gl.glVertex3d(1, -1, 1);
+            gl.glTexCoord2d(3.0 / 4.0, 1.0 / 3.0);
+            gl.glVertex3d(1, -1, 1);
 
-                gl.glTexCoord2d(3.0 / 4.0, 2.0 / 3.0);
-                gl.glVertex3d(1, 1, 1);
+            gl.glTexCoord2d(1.0, 1.0 / 3.0);
+            gl.glVertex3d(-1, -1, 1);
 
-                // Front face
-                gl.glTexCoord2d(3.0 / 4.0, 2.0 / 3.0);
-                gl.glVertex3d(1, 1, 1);
-
-                gl.glTexCoord2d(3.0 / 4.0, 1.0 / 3.0);
-                gl.glVertex3d(1, -1, 1);
-
-                gl.glTexCoord2d(1.0, 1.0 / 3.0);
-                gl.glVertex3d(-1, -1, 1);
-
-                gl.glTexCoord2d(1.0, 2.0 / 3.0);
-                gl.glVertex3d(-1, 1, 1);
+            gl.glTexCoord2d(1.0, 2.0 / 3.0);
+            gl.glVertex3d(-1, 1, 1);
 
 
-                // Bottom face
-                gl.glTexCoord2d(1.0 / 4.0, 1.0 / 3.0);
-                gl.glVertex3d(-1, -1, -1);
+            // Bottom face
+            gl.glTexCoord2d(1.0 / 4.0, 1.0 / 3.0);
+            gl.glVertex3d(-1, -1, -1);
 
-                gl.glTexCoord2d(1.0 / 4.0, 0.0);
-                gl.glVertex3d(-1, -1, 1);
+            gl.glTexCoord2d(1.0 / 4.0, 0.0);
+            gl.glVertex3d(-1, -1, 1);
 
-                gl.glTexCoord2d(2.0 / 4.0, 0.0);
-                gl.glVertex3d(1, -1, 1);
+            gl.glTexCoord2d(2.0 / 4.0, 0.0);
+            gl.glVertex3d(1, -1, 1);
 
-                gl.glTexCoord2d(2.0 / 4.0, 1.0 / 3.0);
-                gl.glVertex3d(1, -1, -1);
-            gl.glEnd();
+            gl.glTexCoord2d(2.0 / 4.0, 1.0 / 3.0);
+            gl.glVertex3d(1, -1, -1);
+        gl.glEnd();
         gl.glPopMatrix();
+
+        for(int i = 0; i < stackSize; i++) {
+            gl.glPopMatrix();
+        }
+
         texture.disable(gl);
 
     }
