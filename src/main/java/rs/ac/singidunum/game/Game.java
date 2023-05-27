@@ -1,7 +1,6 @@
 package rs.ac.singidunum.game;
 
 import rs.ac.singidunum.engine.components.*;
-import rs.ac.singidunum.engine.enums.MaterialShading;
 import rs.ac.singidunum.engine.util.*;
 import rs.ac.singidunum.engine.interfaces.IGame;
 import rs.ac.singidunum.game.scripts.MouseLook;
