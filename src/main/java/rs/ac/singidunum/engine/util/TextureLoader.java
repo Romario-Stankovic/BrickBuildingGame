@@ -8,7 +8,7 @@ import com.jogamp.opengl.util.texture.TextureIO;
 
 public class TextureLoader {
     
-    public static Texture loadTexture(String path) {
+    public static Texture load(String path) {
         
         URL url;
         try {

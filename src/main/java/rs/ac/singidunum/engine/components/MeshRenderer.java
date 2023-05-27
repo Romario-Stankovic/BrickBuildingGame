@@ -24,10 +24,6 @@ public class MeshRenderer extends Behavior implements IRenderable {
 
     @Getter
     @Setter
-    private Texture texture;
-
-    @Getter
-    @Setter
     private Material material;
 
     Stack<Transform> transforms;
@@ -60,11 +56,6 @@ public class MeshRenderer extends Behavior implements IRenderable {
 
         int stackSize = transforms.size();
 
-        if(texture != null) {
-            texture.enable(gl);
-            texture.bind(gl);
-        }
-
         while(!transforms.empty()) {
             gl.glPushMatrix();
             Transform transform = transforms.pop();
@@ -80,13 +71,18 @@ public class MeshRenderer extends Behavior implements IRenderable {
         List<Vector3> normals = mesh.getNormals();
         List<Vector2> uvs = mesh.getUvs();
 
-        gl.glBegin(GL2.GL_TRIANGLES);
-
         if(material == null) {
             throw new RuntimeException("There is no material attached to MeshRenderer on GameObject " + this.getGameObject().getName());
         }
 
         material.apply();
+
+        if(material.getTexture() != null) {
+            material.getTexture().enable(gl);
+            material.getTexture().bind(gl);
+        }
+
+        gl.glBegin(GL2.GL_TRIANGLES);
 
         for(int[][] face : faces) {
             for(int i = 0; i < 3; i++) {
@@ -111,8 +107,8 @@ public class MeshRenderer extends Behavior implements IRenderable {
             gl.glPopMatrix();
         }
 
-        if(texture != null) {
-            texture.disable(gl);
+        if(material.getTexture() != null) {
+            material.getTexture().disable(gl);
         }
 
     }

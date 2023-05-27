@@ -15,10 +15,6 @@ import java.util.Stack;
 
 public class Skybox extends Behavior implements IRenderable {
 
-    @Getter
-    @Setter
-    private Texture texture;
-
     private Camera camera;
 
     private Stack<Transform> transforms;
@@ -26,9 +22,12 @@ public class Skybox extends Behavior implements IRenderable {
     private Material material;
 
     public Skybox() {
-        this.texture = null;
         this.transforms = new Stack<>();
         material = new Material();
+    }
+
+    public void setTexture(Texture texture) {
+        this.material.setTexture(texture);
     }
 
     @Override
@@ -47,7 +46,7 @@ public class Skybox extends Behavior implements IRenderable {
     @Override
     public void render(GLAutoDrawable drawable) {
 
-        if (texture == null) {
+        if (material.getTexture() == null) {
             return;
         }
 
@@ -62,8 +61,8 @@ public class Skybox extends Behavior implements IRenderable {
 
         material.apply();
 
-        texture.enable(gl);
-        texture.bind(gl);
+        material.getTexture().enable(gl);
+        material.getTexture().bind(gl);
         gl.glTexParameteri(GL2.GL_TEXTURE, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
         gl.glTexParameteri(GL2.GL_TEXTURE, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
         gl.glTexParameteri(GL2.GL_TEXTURE, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
@@ -82,14 +81,14 @@ public class Skybox extends Behavior implements IRenderable {
             gl.glTexCoord2d(1.0 / 4.0, 2.0 / 3.0);
             gl.glVertex3d(-1, 1, -1);
 
-            gl.glTexCoord2d(1.0 / 4.0, 1.0);
-            gl.glVertex3d(-1, 1, 1);
+            gl.glTexCoord2d(2.0 / 4.0, 2. / 3.);
+            gl.glVertex3d(1, 1, -1);
 
             gl.glTexCoord2d(2.0 / 4.0, 1.0);
             gl.glVertex3d(1, 1, 1);
 
-            gl.glTexCoord2d(2.0 / 4.0, 2. / 3.);
-            gl.glVertex3d(1, 1, -1);
+            gl.glTexCoord2d(1.0 / 4.0, 1.0);
+            gl.glVertex3d(-1, 1, 1);
 
             // Left face
             gl.glTexCoord2d(0.0, 2.0 / 3.0);
@@ -163,7 +162,7 @@ public class Skybox extends Behavior implements IRenderable {
             gl.glPopMatrix();
         }
 
-        texture.disable(gl);
+        material.getTexture().disable(gl);
 
     }
 

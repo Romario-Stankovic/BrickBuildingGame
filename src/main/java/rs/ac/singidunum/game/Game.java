@@ -23,12 +23,14 @@ public class Game implements IGame {
 
         GameObject camera = new GameObject("Camera");
         mainCamera = camera.addComponent(new Camera());
-        camera.addComponent(new Skybox()).setTexture(TextureLoader.loadTexture("/textures/skybox.png"));
+        Skybox skybox = camera.addComponent(new Skybox());
+        skybox.setTexture(TextureLoader.load("/textures/skybox.png"));
         camera.getTransform().setPosition(new Vector3(0, 0, -10));
         camera.setParent(pivot);
 
         Material material = new Material();
-        material.setAmbient(new Color(50, 50, 50));
+        material.setAmbient(new Color(128, 128, 128));
+        material.setShininess(52f);
 
         GameObject brick = new GameObject("Brick");
         Mesh mesh = ModelLoader.load("/models/brick2x2.obj");
@@ -51,15 +53,15 @@ public class Game implements IGame {
         ambientLight.addComponent(new AmbientLight());
         ambientLight.setParent(scene);
 
-        GameObject directionalLight = new GameObject("Directional Light");
+/*        GameObject directionalLight = new GameObject("Directional Light");
         directionalLight.addComponent(new DirectionalLight());
-        directionalLight.getTransform().setPosition(new Vector3(0, 0, 1));
-        directionalLight.setParent(scene);
+        directionalLight.getTransform().setPosition(new Vector3(0, 1, 1));
+        directionalLight.setParent(scene);*/
 
-        /*GameObject pointLight = new GameObject("Point Light");
+        GameObject pointLight = new GameObject("Point Light");
         pointLight.addComponent(new PointLight());
-        pointLight.getTransform().setPosition(new Vector3(0, 5, 0));
-        pointLight.setParent(scene);*/
+        pointLight.getTransform().setPosition(new Vector3(0, 5, -5));
+        pointLight.setParent(scene);
 
     }
 

@@ -31,6 +31,10 @@ public class Engine implements GLEventListener {
         GLProfile profile = GLProfile.getDefault();
         GLCapabilities capabilities = new GLCapabilities(profile);
 
+        // Set the depth buffer size
+        capabilities.setDepthBits(24);
+        capabilities.setDoubleBuffered(true);
+
         canvas = new GLCanvas(capabilities);
         animator = new FPSAnimator(canvas, FPS);
 
@@ -102,7 +106,7 @@ public class Engine implements GLEventListener {
 
         // Enable depth testing
         gl.glEnable(GL2.GL_DEPTH_TEST);
-        
+
         if(game == null) {
             throw new RuntimeException("Game not registered");
         }
