@@ -11,24 +11,26 @@ import javax.swing.*;
 
 public class Engine implements GLEventListener {
 
-    private final GLProfile profile;
-    private final GLCapabilities capabilities;
     private final GLCanvas canvas;
     private final FPSAnimator animator;
+
+    @Getter
+    private static GLAutoDrawable drawable;
+
+    @Getter
+    private static int maxLights = 0;
 
     private static final int FPS = 60;
 
     private long lastTimestamp;
 
-    @Getter
-    private static GLAutoDrawable drawable;
-
     private IGame game;
 
     public Engine() {
 
-        profile = GLProfile.getDefault();
-        capabilities = new GLCapabilities(profile);
+        GLProfile profile = GLProfile.getDefault();
+        GLCapabilities capabilities = new GLCapabilities(profile);
+
         canvas = new GLCanvas(capabilities);
         animator = new FPSAnimator(canvas, FPS);
 
@@ -70,7 +72,12 @@ public class Engine implements GLEventListener {
             return;
         }
 
+        gl.glEnable(GL2.GL_LIGHTING);
+
         game.update(delta);
+
+        gl.glDisable(GL2.GL_LIGHTING);
+
     }
 
     @Override
@@ -81,10 +88,23 @@ public class Engine implements GLEventListener {
     @Override
     public void init(GLAutoDrawable drawable) {
 
+        // Set the static drawable variable
         Engine.drawable = drawable;
 
+        // Get the maximum number of lights
+        int[] maxLights = new int[1];
+        GL2 gl = drawable.getGL().getGL2();
+        gl.glGetIntegerv(GL2.GL_MAX_LIGHTS, maxLights, 0);
+        Engine.maxLights = maxLights[0];
+
+        // Disable default ambient light
+        gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, new float[]{0f,0f,0f,0f}, 0);
+
+        // Enable depth testing
+        gl.glEnable(GL2.GL_DEPTH_TEST);
+        
         if(game == null) {
-            return;
+            throw new RuntimeException("Game not registered");
         }
 
         game.init();

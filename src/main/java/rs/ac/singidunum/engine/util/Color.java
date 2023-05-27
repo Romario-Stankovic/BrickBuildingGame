@@ -8,10 +8,10 @@ import lombok.Setter;
 @Setter
 public class Color {
 
-    int red;
-    int green;
-    int blue;
-    int alpha;
+    private int red;
+    private int green;
+    private int blue;
+    private int alpha;
 
     public Color(int red, int green, int blue, int alpha) {
         this.red = red;

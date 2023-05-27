@@ -7,7 +7,9 @@ import com.jogamp.opengl.util.texture.Texture;
 import lombok.Getter;
 import lombok.Setter;
 import rs.ac.singidunum.engine.Engine;
+import rs.ac.singidunum.engine.components.base.Behavior;
 import rs.ac.singidunum.engine.interfaces.IRenderable;
+import rs.ac.singidunum.engine.util.Material;
 
 import java.util.Stack;
 
@@ -21,9 +23,12 @@ public class Skybox extends Behavior implements IRenderable {
 
     private Stack<Transform> transforms;
 
+    private Material material;
+
     public Skybox() {
         this.texture = null;
         this.transforms = new Stack<>();
+        material = new Material();
     }
 
     @Override
@@ -54,6 +59,8 @@ public class Skybox extends Behavior implements IRenderable {
             current = current.getParent();
         }
         int stackSize = transforms.size();
+
+        material.apply();
 
         texture.enable(gl);
         texture.bind(gl);

@@ -6,7 +6,9 @@ import com.jogamp.opengl.util.texture.Texture;
 import lombok.Getter;
 import lombok.Setter;
 import rs.ac.singidunum.engine.Engine;
+import rs.ac.singidunum.engine.components.base.Behavior;
 import rs.ac.singidunum.engine.interfaces.IRenderable;
+import rs.ac.singidunum.engine.util.Material;
 import rs.ac.singidunum.engine.util.Mesh;
 import rs.ac.singidunum.engine.util.Vector2;
 import rs.ac.singidunum.engine.util.Vector3;
@@ -23,6 +25,10 @@ public class MeshRenderer extends Behavior implements IRenderable {
     @Getter
     @Setter
     private Texture texture;
+
+    @Getter
+    @Setter
+    private Material material;
 
     Stack<Transform> transforms;
 
@@ -75,6 +81,13 @@ public class MeshRenderer extends Behavior implements IRenderable {
         List<Vector2> uvs = mesh.getUvs();
 
         gl.glBegin(GL2.GL_TRIANGLES);
+
+        if(material == null) {
+            throw new RuntimeException("There is no material attached to MeshRenderer on GameObject " + this.getGameObject().getName());
+        }
+
+        material.apply();
+
         for(int[][] face : faces) {
             for(int i = 0; i < 3; i++) {
                 // Check if the face has a UV component
@@ -83,7 +96,6 @@ public class MeshRenderer extends Behavior implements IRenderable {
                 }
 
                 // Check if the face has a normal component
-
                 if(face[i][2] >= 0) {
                     gl.glNormal3d(normals.get(face[i][2]).getX(), normals.get(face[i][2]).getY(), normals.get(face[i][2]).getZ());
                 }

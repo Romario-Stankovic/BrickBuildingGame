@@ -1,6 +1,8 @@
-package rs.ac.singidunum.engine.components;
+package rs.ac.singidunum.engine.components.base;
 
 import lombok.Getter;
+import rs.ac.singidunum.engine.components.GameObject;
+import rs.ac.singidunum.engine.components.Transform;
 
 public abstract class Behavior {
 

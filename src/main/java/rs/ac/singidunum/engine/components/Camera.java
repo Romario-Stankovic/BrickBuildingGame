@@ -7,6 +7,7 @@ import com.jogamp.opengl.glu.GLU;
 import lombok.Getter;
 import lombok.Setter;
 import rs.ac.singidunum.engine.Engine;
+import rs.ac.singidunum.engine.components.base.Behavior;
 import rs.ac.singidunum.engine.util.Color;
 import rs.ac.singidunum.engine.interfaces.OnRenderCallback;
 
@@ -67,7 +68,6 @@ public class Camera extends Behavior {
         int stackSize = transforms.size();
 
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-        gl.glEnable(GL2.GL_DEPTH_TEST);
 
         gl.glClearColor(clearColor.getNormalizedRed(), clearColor.getNormalizedGreen(), clearColor.getNormalizedBlue(), clearColor.getNormalizedAlpha());
 

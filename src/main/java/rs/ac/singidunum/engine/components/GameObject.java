@@ -1,11 +1,20 @@
 package rs.ac.singidunum.engine.components;
 
 import lombok.Getter;
+import lombok.Setter;
+import rs.ac.singidunum.engine.components.base.Behavior;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameObject extends Behavior {
+
+    @Getter
+    private String name;
+
+    @Getter
+    @Setter
+    private boolean acvtive = true;
 
     @Getter
     private Transform transform;
@@ -18,11 +27,16 @@ public class GameObject extends Behavior {
     @Getter
     private List<GameObject> children;
 
-    public GameObject() {
+    public GameObject(String name) {
+        this.name = name;
         this.transform = new Transform(this);
         this.components = new CopyOnWriteArrayList<>();
         parent = null;
         children = new CopyOnWriteArrayList<>();
+    }
+
+    public GameObject() {
+        this("GameObject");
     }
 
     @Override
@@ -37,6 +51,11 @@ public class GameObject extends Behavior {
 
     @Override
     public void update(double delta) {
+
+        if(!acvtive) {
+            return;
+        }
+
         for (Behavior component : components) {
             component.update(delta);
         }

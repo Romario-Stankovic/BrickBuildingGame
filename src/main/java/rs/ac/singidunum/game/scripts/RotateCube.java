@@ -1,7 +1,7 @@
 package rs.ac.singidunum.game.scripts;
 
 import rs.ac.singidunum.engine.Input;
-import rs.ac.singidunum.engine.components.Behavior;
+import rs.ac.singidunum.engine.components.base.Behavior;
 import rs.ac.singidunum.engine.util.Vector3;
 
 import java.awt.event.KeyEvent;
