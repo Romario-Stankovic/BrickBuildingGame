@@ -75,12 +75,12 @@ public class MeshRenderer extends Behavior implements IRenderable {
             throw new RuntimeException("There is no material attached to MeshRenderer on GameObject " + this.getGameObject().getName());
         }
 
-        material.apply();
-
         if(material.getTexture() != null) {
             material.getTexture().enable(gl);
             material.getTexture().bind(gl);
         }
+
+        material.apply();
 
         gl.glBegin(GL2.GL_TRIANGLES);
 

@@ -3,6 +3,7 @@ package rs.ac.singidunum.game;
 import rs.ac.singidunum.engine.components.*;
 import rs.ac.singidunum.engine.util.*;
 import rs.ac.singidunum.engine.interfaces.IGame;
+import rs.ac.singidunum.game.factories.MaterialFactory;
 import rs.ac.singidunum.game.scripts.MouseLook;
 import rs.ac.singidunum.game.scripts.RotateCube;
 
@@ -28,15 +29,14 @@ public class Game implements IGame {
         camera.getTransform().setPosition(new Vector3(0, 0, -10));
         camera.setParent(pivot);
 
-        Material material = new Material();
-        material.setAmbient(new Color(128, 128, 128));
-        material.setShininess(52f);
+        Material mat = MaterialFactory.getDefaultMaterial();
+        mat.setMainColor(new Color(255, 0, 0));
 
         GameObject brick = new GameObject("Brick");
         Mesh mesh = ModelLoader.load("/models/brick2x2.obj");
         MeshRenderer mr = brick.addComponent(new MeshRenderer());
         mr.setMesh(mesh);
-        mr.setMaterial(material);
+        mr.setMaterial(mat);
         brick.getTransform().setPosition(new Vector3(0, 0, 0));
         brick.addComponent(new RotateCube());
         brick.setParent(scene);
@@ -44,7 +44,7 @@ public class Game implements IGame {
         GameObject brick2 = new GameObject("Brick2");
         MeshRenderer mr2 = brick2.addComponent(new MeshRenderer());
         mr2.setMesh(mesh);
-        mr2.setMaterial(material);
+        mr2.setMaterial(mat);
         brick2.getTransform().setPosition(new Vector3(-2, 0, -2));
         brick2.getTransform().setScale(new Vector3(0.5, 0.5, 0.5));
         brick2.setParent(brick);
@@ -53,15 +53,15 @@ public class Game implements IGame {
         ambientLight.addComponent(new AmbientLight());
         ambientLight.setParent(scene);
 
-/*        GameObject directionalLight = new GameObject("Directional Light");
+        GameObject directionalLight = new GameObject("Directional Light");
         directionalLight.addComponent(new DirectionalLight());
-        directionalLight.getTransform().setPosition(new Vector3(0, 1, 1));
-        directionalLight.setParent(scene);*/
+        directionalLight.getTransform().setPosition(new Vector3(0, 1, -1));
+        directionalLight.setParent(scene);
 
-        GameObject pointLight = new GameObject("Point Light");
+/*        GameObject pointLight = new GameObject("Point Light");
         pointLight.addComponent(new PointLight());
-        pointLight.getTransform().setPosition(new Vector3(0, 5, -5));
-        pointLight.setParent(scene);
+        pointLight.getTransform().setPosition(new Vector3(0, 100, 0));
+        pointLight.setParent(scene);*/
 
     }
 

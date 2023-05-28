@@ -44,4 +44,13 @@ public class Color {
         return alpha / 255f;
     }
 
+    public static Color multiply(Color a, Color b) {
+        return new Color(
+                (int) (a.getNormalizedRed() * b.getNormalizedRed() * 255),
+                (int) (a.getNormalizedGreen() * b.getNormalizedGreen() * 255),
+                (int) (a.getNormalizedBlue() * b.getNormalizedBlue() * 255),
+                (int) (a.getNormalizedAlpha() * b.getNormalizedAlpha() * 255)
+        );
+    }
+
 }

@@ -10,6 +10,10 @@ public class PointLight extends Light {
     Color diffuse;
     Color specular;
 
+    private float constantAttenuation = 0.0f;
+    private float linearAttenuation = 0.09f;
+    private float quadraticAttenuation = 0.032f;
+
     public PointLight(Color diffuse, Color specular) {
         super();
         this.diffuse = diffuse;
@@ -44,9 +48,9 @@ public class PointLight extends Light {
         gl.glLightfv(LIGHT, GL2.GL_DIFFUSE, d, 0);
         gl.glLightfv(LIGHT, GL2.GL_SPECULAR, s, 0);
 
-        gl.glLightfv(LIGHT, GL2.GL_CONSTANT_ATTENUATION, new float[]{1.0f}, 0);
-        gl.glLightfv(LIGHT, GL2.GL_LINEAR_ATTENUATION, new float[]{0.0f}, 0);
-        gl.glLightfv(LIGHT, GL2.GL_QUADRATIC_ATTENUATION, new float[]{0.0f}, 0);
+        gl.glLightfv(LIGHT, GL2.GL_CONSTANT_ATTENUATION, new float[]{constantAttenuation}, 0);
+        gl.glLightfv(LIGHT, GL2.GL_LINEAR_ATTENUATION, new float[]{linearAttenuation}, 0);
+        gl.glLightfv(LIGHT, GL2.GL_QUADRATIC_ATTENUATION, new float[]{quadraticAttenuation}, 0);
 
     }
 

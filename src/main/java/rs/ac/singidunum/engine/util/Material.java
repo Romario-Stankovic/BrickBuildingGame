@@ -12,20 +12,24 @@ public class Material {
 
     private Texture texture;
 
-    private Color ambient;
+    private Color mainColor;
 
-    private Color diffuse;
-
-    private Color specular;
+    private Color ambientColor;
+    private Color diffuseColor;
+    private Color specularColor;
+    private Color emissionColor;
 
     private float shininess;
 
     private boolean backfaceCulling;
 
     public Material() {
-        ambient = new Color(255, 255, 255);
-        diffuse = new Color(255, 255, 255);
-        specular = new Color(255, 255, 255);
+        mainColor = new Color(255, 255, 255);
+        ambientColor = new Color(255, 255, 255);
+        diffuseColor = new Color(255, 255, 255);
+        specularColor = new Color(255, 255, 255);
+        emissionColor = new Color(0, 0, 0);
+
         shininess = 0.0f;
         backfaceCulling = true;
     }
@@ -33,31 +37,48 @@ public class Material {
     public void apply() {
         GL2 gl = Engine.getDrawable().getGL().getGL2();
 
+        Color ambient = Color.multiply(mainColor, ambientColor);
+        Color diffuse = Color.multiply(mainColor, diffuseColor);
+
         float[] a = {
                 ambient.getNormalizedRed(),
                 ambient.getNormalizedGreen(),
                 ambient.getNormalizedBlue(),
-                1.0f
+                ambient.getNormalizedAlpha()
         };
 
         float[] d = {
                 diffuse.getNormalizedRed(),
                 diffuse.getNormalizedGreen(),
                 diffuse.getNormalizedBlue(),
-                1.0f
+                diffuse.getNormalizedAlpha()
         };
 
         float[] s = {
-                specular.getNormalizedRed(),
-                specular.getNormalizedGreen(),
-                specular.getNormalizedBlue(),
-                1.0f
+                specularColor.getNormalizedRed(),
+                specularColor.getNormalizedGreen(),
+                specularColor.getNormalizedBlue(),
+                specularColor.getNormalizedAlpha()
         };
 
-        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, a, 0);
-        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, d, 0);
-        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, s, 0);
-        gl.glMaterialf(GL2.GL_FRONT, GL2.GL_SHININESS, shininess);
+        float[] e = {
+                emissionColor.getNormalizedRed(),
+                emissionColor.getNormalizedGreen(),
+                emissionColor.getNormalizedBlue(),
+                emissionColor.getNormalizedAlpha()
+        };
+
+        float[] alpha = {
+                mainColor.getNormalizedAlpha()
+        };
+
+        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, a, 0);
+        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, d, 0);
+        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, s, 0);
+        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, e, 0);
+
+        gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, shininess);
+        gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_ALPHA, alpha, 0);
 
         if(backfaceCulling) {
             gl.glEnable(GL2.GL_CULL_FACE);
