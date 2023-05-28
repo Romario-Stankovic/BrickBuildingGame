@@ -1,21 +1,42 @@
 package rs.ac.singidunum.game.scripts;
 
 import rs.ac.singidunum.engine.Input;
+import rs.ac.singidunum.engine.components.GameObject;
+import rs.ac.singidunum.engine.util.Mathf;
 import rs.ac.singidunum.engine.components.base.Behavior;
 import rs.ac.singidunum.engine.util.Vector3;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 public class MouseLook extends Behavior {
 
-    int lastX = 0;
-    int lastY = 0;
+    private int lastX = 0;
+    private int lastY = 0;
+    private int zoom = -30;
 
-    double speed = 10;
+    private double panSpeed = 0.1;
+    private double zoomSpeed = 1;
+
+    private boolean canPan = false;
+    private GameObject camera;
 
     @Override
     public void start() {
+
+        camera = getGameObject().findChild("Camera");
+
+        Input.onMouseDown(MouseEvent.BUTTON1, (args) -> {
+            canPan = true;
+        });
+
+        Input.onMouseUp(MouseEvent.BUTTON1, (args) -> {
+            canPan = false;
+        });
+
+        Input.onMouseScrolled((args) -> {
+            zoom -= (int) args[0] * zoomSpeed;
+            zoom = Mathf.clamp(zoom, -50, -10);
+        });
 
     }
 
@@ -28,37 +49,12 @@ public class MouseLook extends Behavior {
         lastX = x;
         lastY = y;
 
-        if(!Input.isMouseDown(MouseEvent.BUTTON1)) {
-            return;
+        camera.getTransform().getPosition().setZ(zoom);
+
+        if(canPan) {
+            getTransform().getRotation().add(new Vector3(dy * panSpeed, dx * panSpeed, 0));
         }
 
-        //TODO: Check why is this inverted?
-        if(Input.isKeyDown(KeyEvent.VK_W)) {
-            getTransform().getPosition().add(new Vector3(0, 0, speed * delta));
-        }
-
-        if(Input.isKeyDown(KeyEvent.VK_S)) {
-            getTransform().getPosition().add(new Vector3(0, 0, -speed * delta));
-        }
-
-        if(Input.isKeyDown(KeyEvent.VK_A)) {
-            getTransform().getPosition().add(new Vector3(speed * delta, 0, 0));
-        }
-
-        if(Input.isKeyDown(KeyEvent.VK_D)) {
-            getTransform().getPosition().add(new Vector3(-speed * delta, 0, 0));
-        }
-
-        if(Input.isKeyDown(KeyEvent.VK_Q)) {
-            getTransform().getPosition().add(new Vector3(0, speed * delta, 0));
-        }
-
-        if(Input.isKeyDown(KeyEvent.VK_E)) {
-            getTransform().getPosition().add(new Vector3(0, -speed * delta, 0));
-        }
-
-        getTransform().getRotation().add(new Vector3(dy * 0.1f, dx * 0.1f, 0));
 
     }
-
 }

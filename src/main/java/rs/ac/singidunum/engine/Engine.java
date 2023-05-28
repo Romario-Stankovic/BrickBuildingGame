@@ -26,6 +26,9 @@ public class Engine implements GLEventListener {
 
     private IGame game;
 
+    @Getter
+    private static final Events events = new Events();
+
     public Engine() {
 
         GLProfile profile = GLProfile.getDefault();
@@ -42,6 +45,7 @@ public class Engine implements GLEventListener {
         canvas.addKeyListener(Input.instance);
         canvas.addMouseListener(Input.instance);
         canvas.addMouseMotionListener(Input.instance);
+        canvas.addMouseWheelListener(Input.instance);
 
         lastTimestamp = System.currentTimeMillis();
     }

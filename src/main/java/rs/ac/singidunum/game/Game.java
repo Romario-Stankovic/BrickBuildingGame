@@ -1,53 +1,39 @@
 package rs.ac.singidunum.game;
 
+import rs.ac.singidunum.engine.Engine;
 import rs.ac.singidunum.engine.components.*;
 import rs.ac.singidunum.engine.util.*;
 import rs.ac.singidunum.engine.interfaces.IGame;
 import rs.ac.singidunum.game.factories.MaterialFactory;
 import rs.ac.singidunum.game.scripts.MouseLook;
-import rs.ac.singidunum.game.scripts.RotateCube;
 
 public class Game implements IGame {
 
     Camera mainCamera;
-
     GameObject scene;
 
     @Override
     public void init() {
 
+        // Initialize listeners
+        Engine.getEvents().subscribe("newGame", (args) -> {
+           //TODO: Add new game logic
+            System.out.println("New game started!");
+        });
+
+        // Initialize scene
         scene = new GameObject("Scene");
 
-        GameObject pivot = new GameObject("Pivot");
-        pivot.setParent(scene);
-        pivot.addComponent(new MouseLook());
+        // Initialize Camera
+
+        Skybox skybox = new Skybox();
+        skybox.setTexture(TextureLoader.load("/textures/skybox.png"));
 
         GameObject camera = new GameObject("Camera");
         mainCamera = camera.addComponent(new Camera());
-        Skybox skybox = camera.addComponent(new Skybox());
-        skybox.setTexture(TextureLoader.load("/textures/skybox.png"));
-        camera.getTransform().setPosition(new Vector3(0, 0, -10));
-        camera.setParent(pivot);
+        camera.addComponent(skybox);
 
-        Material mat = MaterialFactory.getDefaultMaterial();
-        mat.setMainColor(new Color(255, 0, 0));
-
-        GameObject brick = new GameObject("Brick");
-        Mesh mesh = ModelLoader.load("/models/brick2x2.obj");
-        MeshRenderer mr = brick.addComponent(new MeshRenderer());
-        mr.setMesh(mesh);
-        mr.setMaterial(mat);
-        brick.getTransform().setPosition(new Vector3(0, 0, 0));
-        brick.addComponent(new RotateCube());
-        brick.setParent(scene);
-
-        GameObject brick2 = new GameObject("Brick2");
-        MeshRenderer mr2 = brick2.addComponent(new MeshRenderer());
-        mr2.setMesh(mesh);
-        mr2.setMaterial(mat);
-        brick2.getTransform().setPosition(new Vector3(-2, 0, -2));
-        brick2.getTransform().setScale(new Vector3(0.5, 0.5, 0.5));
-        brick2.setParent(brick);
+        // Initialize lights
 
         GameObject ambientLight = new GameObject("Ambient Light");
         ambientLight.addComponent(new AmbientLight());
@@ -58,10 +44,25 @@ public class Game implements IGame {
         directionalLight.getTransform().setPosition(new Vector3(0, 1, -1));
         directionalLight.setParent(scene);
 
-/*        GameObject pointLight = new GameObject("Point Light");
-        pointLight.addComponent(new PointLight());
-        pointLight.getTransform().setPosition(new Vector3(0, 100, 0));
-        pointLight.setParent(scene);*/
+        // Initialize pivot
+        GameObject pivot = new GameObject("Pivot");
+        pivot.setParent(scene);
+        pivot.addComponent(new MouseLook());
+        pivot.getTransform().getRotation().setX(30);
+        camera.setParent(pivot);
+        camera.getTransform().setPosition(new Vector3(0, 0, -30));
+
+        // Initialize plate
+        Material plateMaterial = MaterialFactory.getDefaultMaterial();
+        Mesh plateMesh = ModelLoader.load("/models/plate_18x18.obj");
+        MeshRenderer plateRenderer = new MeshRenderer();
+        plateRenderer.setMesh(plateMesh);
+        plateRenderer.setMaterial(plateMaterial);
+
+        plateMaterial.setMainColor(new Color(63, 155, 11));
+        GameObject plate = new GameObject("Plate");
+        plate.addComponent(plateRenderer);
+        plate.setParent(scene);
 
     }
 

@@ -92,4 +92,13 @@ public class GameObject extends Behavior {
         parent.children.add(this);
     }
 
+    public GameObject findChild(String name) {
+        for(GameObject child : children) {
+            if(child.getName().equals(name)) {
+                return child;
+            }
+        }
+        return null;
+    }
+
 }

@@ -7,7 +7,7 @@ public class MaterialFactory {
 
     public static Material getDefaultMaterial() {
         Material material = new Material();
-        material.setMainColor(new Color(255, 255, 255));
+        material.setMainColor(new Color(200, 200, 200));
         material.setAmbientColor(new Color(128, 128, 128));
         material.setShininess(32f);
         return material;

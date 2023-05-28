@@ -36,6 +36,10 @@ public class Main
         JMenuItem helpItem = new JMenuItem("Help");
         JMenuItem quitItem = new JMenuItem("Quit");
 
+        newGameItem.addActionListener(e -> {
+            Engine.getEvents().emit("newGame");
+        });
+
         quitItem.addActionListener(e -> {
             System.exit(0);
         });
