@@ -5,24 +5,28 @@ import rs.ac.singidunum.engine.components.*;
 import rs.ac.singidunum.engine.util.*;
 import rs.ac.singidunum.engine.interfaces.IGame;
 import rs.ac.singidunum.game.factories.MaterialFactory;
+import rs.ac.singidunum.game.scripts.GameManager;
 import rs.ac.singidunum.game.scripts.MouseLook;
 
 public class Game implements IGame {
 
-    Camera mainCamera;
-    GameObject scene;
+    private Camera mainCamera;
+    private GameObject scene;
 
     @Override
     public void init() {
 
+        GameManager gameManager = new GameManager();
+
         // Initialize listeners
         Engine.getEvents().subscribe("newGame", (args) -> {
            //TODO: Add new game logic
-            System.out.println("New game started!");
+            gameManager.newGame();
         });
 
         // Initialize scene
         scene = new GameObject("Scene");
+        scene.addComponent(gameManager);
 
         // Initialize Camera
 
@@ -64,11 +68,6 @@ public class Game implements IGame {
         plate.addComponent(plateRenderer);
         plate.setParent(scene);
 
-    }
-
-    @Override
-    public void start() {
-        scene.start();
     }
 
     @Override

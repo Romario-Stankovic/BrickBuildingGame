@@ -121,8 +121,6 @@ public class Engine implements GLEventListener {
 
         game.init();
 
-        game.start();
-
     }
 
     @Override

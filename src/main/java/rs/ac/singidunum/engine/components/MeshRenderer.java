@@ -28,9 +28,13 @@ public class MeshRenderer extends Behavior implements IRenderable {
 
     Stack<Transform> transforms;
 
+    public MeshRenderer() {
+        this.transforms = new Stack<>();
+    }
+
     @Override
     public void start() {
-        this.transforms = new Stack<>();
+
     }
 
     @Override

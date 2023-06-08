@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import rs.ac.singidunum.engine.components.base.Behavior;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameObject extends Behavior {
@@ -15,6 +17,8 @@ public class GameObject extends Behavior {
     @Getter
     @Setter
     private boolean acvtive = true;
+
+    private boolean started = false;
 
     @Getter
     private Transform transform;
@@ -27,12 +31,15 @@ public class GameObject extends Behavior {
     @Getter
     private List<GameObject> children;
 
+    private static Map<String, GameObject> gameObjects = new HashMap<>();
+
     public GameObject(String name) {
         this.name = name;
         this.transform = new Transform(this);
         this.components = new CopyOnWriteArrayList<>();
         parent = null;
         children = new CopyOnWriteArrayList<>();
+        gameObjects.put(name, this);
     }
 
     public GameObject() {
@@ -41,6 +48,7 @@ public class GameObject extends Behavior {
 
     @Override
     public void start() {
+
         for (Behavior component : components) {
             component.start();
         }
@@ -54,6 +62,11 @@ public class GameObject extends Behavior {
 
         if(!acvtive) {
             return;
+        }
+
+        if(!started) {
+            start();
+            started = true;
         }
 
         for (Behavior component : components) {
@@ -99,6 +112,10 @@ public class GameObject extends Behavior {
             }
         }
         return null;
+    }
+
+    public GameObject findGameObject(String name) {
+        return gameObjects.get(name);
     }
 
 }

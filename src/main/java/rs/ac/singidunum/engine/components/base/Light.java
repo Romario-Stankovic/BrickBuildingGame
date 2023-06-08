@@ -1,10 +1,7 @@
 package rs.ac.singidunum.engine.components.base;
 
 import com.jogamp.opengl.GL2;
-import lombok.Getter;
-import lombok.Setter;
 import rs.ac.singidunum.engine.Engine;
-import rs.ac.singidunum.engine.util.Color;
 
 public abstract class Light extends Behavior {
 
@@ -20,10 +17,8 @@ public abstract class Light extends Behavior {
 
     @Override
     public void start() {
-
         GL2 gl = Engine.getDrawable().getGL().getGL2();
         gl.glEnable(GL2.GL_LIGHT0 + lightNumber);
-
     }
 
     @Override
