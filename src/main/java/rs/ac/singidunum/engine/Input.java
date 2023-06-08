@@ -18,15 +18,15 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
     private static final Events mouseEvents = new Events();
     private static final Events mouseWheelEvents = new Events();
 
-    public static void onKeyDown(Integer keyCode, ICallback callback) {
+    public static void onKeyDown(Short keyCode, ICallback callback) {
         keyEvents.subscribe(keyCode.toString() + "down", callback);
     }
 
-    public static void onKeyUp(Integer keyCode, ICallback callback) {
+    public static void onKeyUp(Short keyCode, ICallback callback) {
         keyEvents.subscribe(keyCode.toString() + "up", callback);
     }
 
-    public static void onKeyPressed(Integer keyCode, ICallback callback) {
+    public static void onKeyPressed(Short keyCode, ICallback callback) {
         keyEvents.subscribe(keyCode.toString() + "pressed", callback);
     }
 

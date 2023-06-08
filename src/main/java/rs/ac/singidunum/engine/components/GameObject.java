@@ -16,7 +16,7 @@ public class GameObject extends Behavior {
 
     @Getter
     @Setter
-    private boolean acvtive = true;
+    private boolean active = true;
 
     private boolean started = false;
 
@@ -49,24 +49,30 @@ public class GameObject extends Behavior {
     @Override
     public void start() {
 
+        if(!active) {
+            return;
+        }
+
         for (Behavior component : components) {
             component.start();
         }
         for(GameObject child : children) {
             child.start();
         }
+
+        started = true;
+
     }
 
     @Override
     public void update(double delta) {
 
-        if(!acvtive) {
+        if(!active) {
             return;
         }
 
         if(!started) {
             start();
-            started = true;
         }
 
         for (Behavior component : components) {
@@ -114,7 +120,7 @@ public class GameObject extends Behavior {
         return null;
     }
 
-    public GameObject findGameObject(String name) {
+    public static GameObject findGameObject(String name) {
         return gameObjects.get(name);
     }
 

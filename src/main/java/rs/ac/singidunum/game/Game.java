@@ -7,6 +7,7 @@ import rs.ac.singidunum.engine.interfaces.IGame;
 import rs.ac.singidunum.game.factories.MaterialFactory;
 import rs.ac.singidunum.game.scripts.GameManager;
 import rs.ac.singidunum.game.scripts.MouseLook;
+import rs.ac.singidunum.game.scripts.Player;
 
 public class Game implements IGame {
 
@@ -20,7 +21,6 @@ public class Game implements IGame {
 
         // Initialize listeners
         Engine.getEvents().subscribe("newGame", (args) -> {
-           //TODO: Add new game logic
             gameManager.newGame();
         });
 
@@ -68,6 +68,13 @@ public class Game implements IGame {
         plate.addComponent(plateRenderer);
         plate.setParent(scene);
 
+        // Initialize Player
+
+        GameObject player = new GameObject("Player");
+        player.setActive(false);
+        player.setParent(scene);
+        player.addComponent(new MeshRenderer());
+        player.addComponent(new Player());
     }
 
     @Override
