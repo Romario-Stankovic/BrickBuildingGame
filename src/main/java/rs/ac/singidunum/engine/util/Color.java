@@ -13,6 +13,13 @@ public class Color {
     private int blue;
     private int alpha;
 
+    public Color(Color c) {
+        this.red = c.red;
+        this.green = c.green;
+        this.blue = c.blue;
+        this.alpha = c.alpha;
+    }
+
     public Color(int red, int green, int blue, int alpha) {
         this.red = red;
         this.green = green;

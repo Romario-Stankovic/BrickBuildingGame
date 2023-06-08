@@ -10,6 +10,11 @@ public class Vector2 {
     protected double x;
     protected double y;
 
+    public Vector2(Vector2 v) {
+        this.x = v.x;
+        this.y = v.y;
+    }
+
     public Vector2(double x, double y) {
         this.x = x;
         this.y = y;
@@ -34,7 +39,7 @@ public class Vector2 {
 
     @Override()
     public String toString() {
-        return String.format("Vector2(%f, %f)", x, y);
+        return "Vector2 {x=" + this.x + ", y=" + this.y + "}";
     }
 
 }

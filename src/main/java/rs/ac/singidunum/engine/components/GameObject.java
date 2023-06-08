@@ -56,9 +56,6 @@ public class GameObject extends Behavior {
         for (Behavior component : components) {
             component.start();
         }
-        for(GameObject child : children) {
-            child.start();
-        }
 
         started = true;
 
@@ -78,6 +75,7 @@ public class GameObject extends Behavior {
         for (Behavior component : components) {
             component.update(delta);
         }
+
         for(GameObject child : children) {
             child.update(delta);
         }
@@ -98,7 +96,7 @@ public class GameObject extends Behavior {
         }
         return null;
     }
-    
+
     public void removeComponent(Behavior component) {
         this.components.remove(component);
     }
@@ -108,7 +106,19 @@ public class GameObject extends Behavior {
             this.parent.children.remove(this);
         }
         this.parent = parent;
+        if(parent == null) {
+            return;
+        }
+
         parent.children.add(this);
+    }
+
+    public void destroy() {
+        if (this.parent != null) {
+            this.parent.children.remove(this);
+        }
+        this.setParent(null);
+        gameObjects.remove(this.name);
     }
 
     public GameObject findChild(String name) {
@@ -124,4 +134,8 @@ public class GameObject extends Behavior {
         return gameObjects.get(name);
     }
 
+    @Override
+    public String toString() {
+        return "GameObject {name=" + this.name + "}";
+    }
 }

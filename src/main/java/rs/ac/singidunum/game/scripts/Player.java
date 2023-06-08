@@ -6,6 +6,7 @@ import java.util.List;
 import com.jogamp.newt.event.KeyEvent;
 
 import rs.ac.singidunum.engine.Input;
+import rs.ac.singidunum.engine.components.GameObject;
 import rs.ac.singidunum.engine.components.MeshRenderer;
 import rs.ac.singidunum.engine.components.base.Behavior;
 import rs.ac.singidunum.engine.util.Color;
@@ -24,6 +25,8 @@ public class Player extends Behavior {
 
     private List<Material> materials = new ArrayList<>(currentModel);
     private int currentMaterial = 0;
+
+    private List<GameObject> bricks = new ArrayList<>();
 
     private void initializeInput() {
 
@@ -44,11 +47,15 @@ public class Player extends Behavior {
         });
 
         Input.onKeyDown(KeyEvent.VK_Q, (args) -> {
-            this.getTransform().getPosition().add(new Vector3(0, -1, 0));
+            this.getTransform().getPosition().add(new Vector3(0, -1.2, 0));
         });
 
         Input.onKeyDown(KeyEvent.VK_E, (args) -> {
-            this.getTransform().getPosition().add(new Vector3(0, 1, 0));
+            this.getTransform().getPosition().add(new Vector3(0, 1.2, 0));
+        });
+
+        Input.onKeyDown(KeyEvent.VK_R, (args) -> {
+            this.getTransform().getRotation().add(new Vector3(0, 90, 0));
         });
 
         Input.onKeyDown(KeyEvent.VK_1, (args) -> {
@@ -83,6 +90,31 @@ public class Player extends Behavior {
             }
         });
 
+        Input.onKeyDown(KeyEvent.VK_SPACE, (args) -> {
+
+            placeCurrentBrick();
+
+        });
+
+        Input.onKeyDown(KeyEvent.VK_BACK_SPACE, (args) -> {
+            
+            if(this.bricks.size() == 0) {
+                return;
+            }
+
+            GameObject brick = this.bricks.get(this.bricks.size() - 1);
+
+            this.bricks.remove(brick);
+
+            brick.destroy();
+
+            GameObject scene = GameObject.findGameObject("Scene");
+            for(GameObject go : scene.getChildren()) {
+                System.out.println(go);
+            }
+
+        });
+
     }
 
     private void initializeModels() {
@@ -98,21 +130,45 @@ public class Player extends Behavior {
     private void initializeMaterials() {
 
         Material red = MaterialFactory.getDefaultMaterial();
-        red.setMainColor(new Color(221, 25, 32));
+        red.setMainColor(new Color(221, 25, 32, 160));
 
         Material green = MaterialFactory.getDefaultMaterial();
-        green.setMainColor(new Color(63, 155, 11));
+        green.setMainColor(new Color(63, 155, 11, 160));
 
         Material blue = MaterialFactory.getDefaultMaterial();
-        blue.setMainColor(new Color(0, 108, 183));
+        blue.setMainColor(new Color(0, 108, 183, 160));
 
         Material yellow = MaterialFactory.getDefaultMaterial();
-        yellow.setMainColor(new Color(255, 205, 3));
+        yellow.setMainColor(new Color(255, 205, 3, 160));
 
         materials.add(red);
         materials.add(green);
         materials.add(blue);
         materials.add(yellow);
+
+    }
+
+    private void placeCurrentBrick() {
+
+        Mesh brickMesh = this.models.get(currentModel);
+        Color color = new Color(myRenderer.getMaterial().getMainColor());
+        color.setAlpha(255);
+
+        Material placedMaterial = MaterialFactory.getDefaultMaterial();
+        placedMaterial.setMainColor(color);
+
+        MeshRenderer renderer = new MeshRenderer();
+        renderer.setMesh(brickMesh);
+        renderer.setMaterial(placedMaterial);
+
+        GameObject brick = new GameObject("Brick:" + bricks.size());
+        brick.getTransform().setPosition(new Vector3(getTransform().getPosition()));
+        brick.getTransform().setRotation(new Vector3(getTransform().getRotation()));
+
+        brick.setParent(GameObject.findGameObject("Scene"));
+        brick.addComponent(renderer);
+
+        this.bricks.add(brick);
 
     }
 
