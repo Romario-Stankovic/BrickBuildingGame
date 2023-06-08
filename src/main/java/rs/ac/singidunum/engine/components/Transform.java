@@ -36,7 +36,7 @@ public class Transform {
                 "position=" + this.position +
                 ", rotation=" + this.rotation +
                 ", scale=" + this.scale +
-                ""}";
+                "}";
     }
 
 }
