@@ -2,6 +2,7 @@ package rs.ac.singidunum.game.scripts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.jogamp.newt.event.KeyEvent;
 
@@ -26,7 +27,7 @@ public class Player extends Behavior {
     private List<Material> materials = new ArrayList<>(currentModel);
     private int currentMaterial = 0;
 
-    private List<GameObject> bricks = new ArrayList<>();
+    private List<GameObject> bricks = new CopyOnWriteArrayList<>();
 
     private void initializeInput() {
 
@@ -167,6 +168,20 @@ public class Player extends Behavior {
 
     }
 
+    public void reset() {
+
+        this.currentModel = 0;
+        this.currentMaterial = 0;
+
+        this.getTransform().setPosition(new Vector3(0, 1.2, 0));
+
+        for (GameObject brick : this.bricks) {
+            this.bricks.remove(brick);
+            brick.destroy();
+        }
+
+    }
+
     @Override
     public void start() {
 
@@ -178,6 +193,8 @@ public class Player extends Behavior {
         initializeInput();
         initializeModels();
         initializeMaterials();
+
+        reset();
     }
 
     @Override

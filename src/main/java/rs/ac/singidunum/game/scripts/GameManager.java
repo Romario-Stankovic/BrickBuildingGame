@@ -2,7 +2,6 @@ package rs.ac.singidunum.game.scripts;
 
 import rs.ac.singidunum.engine.components.GameObject;
 import rs.ac.singidunum.engine.components.base.Behavior;
-import rs.ac.singidunum.engine.util.Vector3;
 
 public class GameManager extends Behavior {
 
@@ -23,7 +22,7 @@ public class GameManager extends Behavior {
     public void newGame() {
 
         player.setActive(true);
-        player.getTransform().setPosition(new Vector3(0, 1.2, 0));
+        player.getComponent(Player.class).reset();
 
     }
 
