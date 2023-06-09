@@ -69,12 +69,12 @@ public class Game implements IGame {
         plate.setParent(scene);
 
         // Initialize Player
-
         GameObject player = new GameObject("Player");
         player.setActive(false);
         player.setParent(scene);
         player.addComponent(new MeshRenderer());
         player.addComponent(new Player());
+
     }
 
     @Override

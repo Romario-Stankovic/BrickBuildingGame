@@ -32,11 +32,7 @@ public class Transform {
 
     @Override
     public String toString() {
-        return "Transform {" +
-                "position=" + this.position +
-                ", rotation=" + this.rotation +
-                ", scale=" + this.scale +
-                "}";
+        return "Transform {position=" + this.position + ", rotation=" + this.rotation + ", scale=" + this.scale + "}";
     }
 
 }

@@ -111,6 +111,9 @@ public class Engine implements GLEventListener {
         // Enable depth testing
         gl.glEnable(GL2.GL_DEPTH_TEST);
 
+        // Enable stencil buffer
+        gl.glEnable(GL2.GL_STENCIL_TEST); 
+
         // Enable alpha blending
         gl.glEnable(GL2.GL_BLEND);
         gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);

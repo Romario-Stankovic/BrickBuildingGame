@@ -1,7 +1,6 @@
 package rs.ac.singidunum.engine.util;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter

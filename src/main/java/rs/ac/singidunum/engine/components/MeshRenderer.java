@@ -2,7 +2,6 @@ package rs.ac.singidunum.engine.components;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.util.texture.Texture;
 import lombok.Getter;
 import lombok.Setter;
 import rs.ac.singidunum.engine.Engine;

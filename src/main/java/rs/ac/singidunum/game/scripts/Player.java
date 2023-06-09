@@ -108,11 +108,6 @@ public class Player extends Behavior {
 
             brick.destroy();
 
-            GameObject scene = GameObject.findGameObject("Scene");
-            for(GameObject go : scene.getChildren()) {
-                System.out.println(go);
-            }
-
         });
 
     }
@@ -133,7 +128,7 @@ public class Player extends Behavior {
         red.setMainColor(new Color(221, 25, 32, 160));
 
         Material green = MaterialFactory.getDefaultMaterial();
-        green.setMainColor(new Color(63, 155, 11, 160));
+        green.setMainColor(new Color(0, 175, 77, 160));
 
         Material blue = MaterialFactory.getDefaultMaterial();
         blue.setMainColor(new Color(0, 108, 183, 160));
@@ -165,7 +160,7 @@ public class Player extends Behavior {
         brick.getTransform().setPosition(new Vector3(getTransform().getPosition()));
         brick.getTransform().setRotation(new Vector3(getTransform().getRotation()));
 
-        brick.setParent(GameObject.findGameObject("Scene"));
+        brick.setParent(GameObject.findGameObject("Plate"));
         brick.addComponent(renderer);
 
         this.bricks.add(brick);
@@ -178,6 +173,7 @@ public class Player extends Behavior {
         myRenderer = getGameObject().getComponent(MeshRenderer.class);
         Material brickMaterial = MaterialFactory.getDefaultMaterial();
         myRenderer.setMaterial(brickMaterial);
+        this.getTransform().setScale(new Vector3(1, 1, 1));
 
         initializeInput();
         initializeModels();
