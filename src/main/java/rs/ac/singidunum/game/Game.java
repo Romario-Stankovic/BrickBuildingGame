@@ -24,6 +24,18 @@ public class Game implements IGame {
             gameManager.newGame();
         });
 
+        Engine.getEvents().subscribe("newEmptyScene", (args) -> {
+            gameManager.newEmptyScene();
+        });
+
+        Engine.getEvents().subscribe("saveShape", (args) -> {
+            gameManager.saveShape();
+        });
+
+        Engine.getEvents().subscribe("loadShape", (args) -> {
+            gameManager.loadShape();
+        });
+
         // Initialize scene
         scene = new GameObject("Scene");
         scene.addComponent(gameManager);

@@ -1,11 +1,11 @@
 package rs.ac.singidunum.game.scripts;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.jogamp.newt.event.KeyEvent;
 
+import lombok.Getter;
 import rs.ac.singidunum.engine.Input;
 import rs.ac.singidunum.engine.components.GameObject;
 import rs.ac.singidunum.engine.components.MeshRenderer;
@@ -13,7 +13,6 @@ import rs.ac.singidunum.engine.components.base.Behavior;
 import rs.ac.singidunum.engine.util.Color;
 import rs.ac.singidunum.engine.util.Material;
 import rs.ac.singidunum.engine.util.Mesh;
-import rs.ac.singidunum.engine.util.ModelLoader;
 import rs.ac.singidunum.engine.util.Vector3;
 import rs.ac.singidunum.game.scripts.factories.MaterialFactory;
 
@@ -24,6 +23,7 @@ public class Player extends Behavior {
     private int currentMaterial = 0;
     private GameManager gameManager = null;
 
+    @Getter
     private final List<GameObject> bricks = new CopyOnWriteArrayList<>();
 
     private void initializeInput() {
@@ -156,7 +156,11 @@ public class Player extends Behavior {
 
         initializeInput();
 
-        reset();
+        this.currentModel = 0;
+        this.currentMaterial = 0;
+
+        this.getTransform().setPosition(new Vector3(0, 1.2, 0));
+
     }
 
     @Override
