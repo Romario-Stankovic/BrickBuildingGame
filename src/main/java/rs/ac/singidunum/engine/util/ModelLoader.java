@@ -1,14 +1,21 @@
 package rs.ac.singidunum.engine.util;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ModelLoader {
 
+    private static final Map<String, Mesh> loadedModels = new HashMap<>();
+
     public static Mesh load(String path) {
 
-        Mesh mesh = new Mesh();
+        if(loadedModels.containsKey(path)) {
+            return loadedModels.get(path);
+        }
 
         try {
+            Mesh mesh = new Mesh();
             InputStream model = Object.class.getResourceAsStream(path);
             BufferedReader reader = new BufferedReader(new InputStreamReader(model));
 
@@ -49,11 +56,11 @@ public class ModelLoader {
 
             }
             reader.close();
+            loadedModels.put(path, mesh);
+            return mesh;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return mesh;
     }
 
 }

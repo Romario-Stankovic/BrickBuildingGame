@@ -4,10 +4,10 @@ import rs.ac.singidunum.engine.Engine;
 import rs.ac.singidunum.engine.components.*;
 import rs.ac.singidunum.engine.util.*;
 import rs.ac.singidunum.engine.interfaces.IGame;
-import rs.ac.singidunum.game.factories.MaterialFactory;
 import rs.ac.singidunum.game.scripts.GameManager;
 import rs.ac.singidunum.game.scripts.MouseLook;
 import rs.ac.singidunum.game.scripts.Player;
+import rs.ac.singidunum.game.scripts.factories.MaterialFactory;
 
 public class Game implements IGame {
 

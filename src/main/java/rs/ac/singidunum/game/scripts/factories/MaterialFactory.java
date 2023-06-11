@@ -1,4 +1,4 @@
-package rs.ac.singidunum.game.factories;
+package rs.ac.singidunum.game.scripts.factories;
 
 import rs.ac.singidunum.engine.util.Color;
 import rs.ac.singidunum.engine.util.Material;
