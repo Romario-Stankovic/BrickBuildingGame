@@ -91,7 +91,7 @@ public class GameObject extends Behavior {
     public <T> T getComponent(Class<T> type) {
         for (Behavior component : components) {
             if (type.isInstance(component)) {
-                return (T) component;
+                return type.cast(component);
             }
         }
         return null;
