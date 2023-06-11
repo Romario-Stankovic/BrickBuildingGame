@@ -19,12 +19,12 @@ import rs.ac.singidunum.game.scripts.factories.MaterialFactory;
 public class Player extends Behavior {
 
     private MeshRenderer myRenderer = null;
-    private int currentModel = 0;
-    private int currentMaterial = 0;
+    private int brickId = 0;
+    private int materialId = 0;
     private GameManager gameManager = null;
 
     @Getter
-    private final List<GameObject> bricks = new CopyOnWriteArrayList<>();
+    private final List<Brick> bricks = new CopyOnWriteArrayList<>();
 
     private void initializeInput() {
 
@@ -57,34 +57,34 @@ public class Player extends Behavior {
         });
 
         Input.onKeyDown(KeyEvent.VK_1, (args) -> {
-            if(currentModel == 0) {
-                currentModel = gameManager.getBricks().size() - 1;
+            if(brickId == 0) {
+                brickId = gameManager.getBricks().size() - 1;
             } else {
-                currentModel--;
+                brickId--;
             }
         });
 
         Input.onKeyDown(KeyEvent.VK_2, (args) -> {
-            if(currentModel == gameManager.getBricks().size() - 1) {
-                currentModel = 0;
+            if(brickId == gameManager.getBricks().size() - 1) {
+                brickId = 0;
             } else {
-                currentModel++;
+                brickId++;
             }
         });
 
         Input.onKeyDown(KeyEvent.VK_3, (args) -> {
-            if(currentMaterial == 0) {
-                currentMaterial = gameManager.getMaterials().size() - 1;
+            if(materialId == 0) {
+                materialId = gameManager.getMaterials().size() - 1;
             } else {
-                currentMaterial--;
+                materialId--;
             }
         });
 
         Input.onKeyDown(KeyEvent.VK_4, (args) -> {
-            if(currentMaterial == gameManager.getMaterials().size() - 1) {
-                currentMaterial = 0;
+            if(materialId == gameManager.getMaterials().size() - 1) {
+                materialId = 0;
             } else {
-                currentMaterial++;
+                materialId++;
             }
         });
 
@@ -100,11 +100,11 @@ public class Player extends Behavior {
                 return;
             }
 
-            GameObject brick = this.bricks.get(this.bricks.size() - 1);
+            Brick brick = this.bricks.get(this.bricks.size() - 1);
+
+            brick.getGameObject().destroy();
 
             this.bricks.remove(brick);
-
-            brick.destroy();
 
         });
 
@@ -112,20 +112,27 @@ public class Player extends Behavior {
 
     private void placeCurrentBrick() {
 
-        Mesh brickMesh = this.gameManager.getBricks().get(currentModel);
-        Material placedMaterial = this.gameManager.getMaterials().get(currentMaterial);
+        Mesh brickMesh = this.gameManager.getBricks().get(brickId);
+        Material placedMaterial = this.gameManager.getMaterials().get(materialId);
 
         MeshRenderer renderer = new MeshRenderer();
         renderer.setMesh(brickMesh);
         renderer.setMaterial(placedMaterial);
 
-        GameObject brick = new GameObject("Brick:" + bricks.size());
-        brick.addComponent(renderer);
+        GameObject go = new GameObject("Brick:" + bricks.size());
+        go.addComponent(renderer);
 
-        brick.getTransform().setPosition(new Vector3(getTransform().getPosition()));
-        brick.getTransform().setRotation(new Vector3(getTransform().getRotation()));
+        go.getTransform().setPosition(new Vector3(getTransform().getPosition()));
+        go.getTransform().setRotation(new Vector3(getTransform().getRotation()));
 
-        brick.setParent(GameObject.findGameObject("Plate"));
+        go.setParent(GameObject.findGameObject("Plate"));
+
+        Brick brick = new Brick();
+        brick.setBrickId(brickId);
+        brick.setMaterialId(materialId);
+        brick.setPosition(new Vector3(getTransform().getPosition()));
+        brick.setRotation(new Vector3(getTransform().getRotation()));
+        brick.setGameObject(go);
 
         this.bricks.add(brick);
 
@@ -133,13 +140,13 @@ public class Player extends Behavior {
 
     public void reset() {
 
-        this.currentModel = 0;
-        this.currentMaterial = 0;
+        this.brickId = 0;
+        this.materialId = 0;
 
         this.getTransform().setPosition(new Vector3(8, 1.2, 8));
 
-        for (GameObject brick : this.bricks) {
-            brick.destroy();
+        for (Brick brick : this.bricks) {
+            brick.getGameObject().destroy();
         }
 
         this.bricks.clear();
@@ -157,8 +164,8 @@ public class Player extends Behavior {
 
         initializeInput();
 
-        this.currentModel = 0;
-        this.currentMaterial = 0;
+        this.brickId = 0;
+        this.materialId = 0;
 
         this.getTransform().setPosition(new Vector3(8, 1.2, 8));
 
@@ -167,8 +174,8 @@ public class Player extends Behavior {
     @Override
     public void update(double delta) {
 
-        Mesh mesh = gameManager.getBricks().get(currentModel);
-        Color color = new Color(gameManager.getMaterials().get(currentMaterial).getMainColor());
+        Mesh mesh = gameManager.getBricks().get(brickId);
+        Color color = new Color(gameManager.getMaterials().get(materialId).getMainColor());
         color.setAlpha(160);
         Material material = MaterialFactory.getDefaultMaterial();
         material.setMainColor(color);

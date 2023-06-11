@@ -31,12 +31,12 @@ public class GameManager extends Behavior {
     @Getter()
     private final List<Material> materials = new ArrayList<>();
 
-    private final List<GameObject> correctBricks = new ArrayList<>();
+    private final List<Brick> correctBricks = new ArrayList<>();
 
     public void reset() {
 
-        for (GameObject brick : correctBricks) {
-            brick.destroy();
+        for(Brick brick : correctBricks) {
+            brick.getGameObject().destroy();
         }
 
         correctBricks.clear();
@@ -87,7 +87,8 @@ public class GameManager extends Behavior {
             gameObject.getTransform().setPosition(bricks.get(i).getPosition());
             gameObject.getTransform().setRotation(bricks.get(i).getRotation());
             gameObject.setParent(GameObject.findGameObject("Scene"));
-            this.correctBricks.add(gameObject);
+            bricks.get(i).setGameObject(gameObject);
+            this.correctBricks.add(bricks.get(i));
         }
 
         player.getGameObject().setActive(true);
@@ -122,19 +123,10 @@ public class GameManager extends Behavior {
 
         Shape shape = new Shape();
 
-        List<GameObject> bricks = player.getBricks();
+        List<Brick> bricks = player.getBricks();
 
-        for (GameObject brick : bricks) {
-            Mesh mesh = brick.getComponent(MeshRenderer.class).getMesh();
-            int meshId = this.bricks.indexOf(mesh);
-            Material material = brick.getComponent(MeshRenderer.class).getMaterial();
-            int materialId = this.materials.indexOf(material);
-
-            shape.addBrick(
-                meshId,
-                materialId,
-                brick.getTransform().getPosition(),
-                brick.getTransform().getRotation());
+        for (Brick brick : bricks) {
+            shape.addBrick(brick);
         }
 
         shape.saveShape(name);
@@ -155,6 +147,7 @@ public class GameManager extends Behavior {
             return;
         }
 
+        reset();
         player.getGameObject().setActive(true);
         player.reset();
 
@@ -174,7 +167,9 @@ public class GameManager extends Behavior {
             gameObject.getTransform().setPosition(bricks.get(i).getPosition());
             gameObject.getTransform().setRotation(bricks.get(i).getRotation());
             gameObject.setParent(GameObject.findGameObject("Plate"));
-            player.getBricks().add(gameObject);
+
+            bricks.get(i).setGameObject(gameObject);
+            player.getBricks().add(bricks.get(i));
         }
     }
 

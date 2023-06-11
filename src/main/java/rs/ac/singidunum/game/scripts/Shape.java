@@ -7,7 +7,6 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
-import rs.ac.singidunum.engine.util.Vector3;
 
 public class Shape {
     @Getter
@@ -17,8 +16,7 @@ public class Shape {
 
     }
 
-    public void addBrick(int brickId, int materialId, Vector3 position, Vector3 rotation) {
-        Brick brick = new Brick(brickId, materialId, position, rotation);
+    public void addBrick(Brick brick) {
         this.bricks.add(brick);
     }
 
