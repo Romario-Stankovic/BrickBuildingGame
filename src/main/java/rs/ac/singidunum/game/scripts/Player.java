@@ -136,12 +136,13 @@ public class Player extends Behavior {
         this.currentModel = 0;
         this.currentMaterial = 0;
 
-        this.getTransform().setPosition(new Vector3(0, 1.2, 0));
+        this.getTransform().setPosition(new Vector3(8, 1.2, 8));
 
         for (GameObject brick : this.bricks) {
-            this.bricks.remove(brick);
             brick.destroy();
         }
+
+        this.bricks.clear();
 
     }
 
@@ -159,7 +160,7 @@ public class Player extends Behavior {
         this.currentModel = 0;
         this.currentMaterial = 0;
 
-        this.getTransform().setPosition(new Vector3(0, 1.2, 0));
+        this.getTransform().setPosition(new Vector3(8, 1.2, 8));
 
     }
 

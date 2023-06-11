@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -30,7 +31,64 @@ public class GameManager extends Behavior {
     @Getter()
     private final List<Material> materials = new ArrayList<>();
 
+    private final List<GameObject> correctBricks = new ArrayList<>();
+
+    public void reset() {
+
+        for (GameObject brick : correctBricks) {
+            brick.destroy();
+        }
+
+        correctBricks.clear();
+
+        player.reset();
+    }
+
     public void newGame() {
+
+        reset();
+
+        Path path = Paths.get("shapes");
+
+        if (!path.toFile().exists()) {
+            path.toFile().mkdir();
+        }
+
+        List<String> shapeNames = new ArrayList<>();
+
+        try {
+            Files.walk(path).forEach(filePath -> {
+                if (Files.isRegularFile(filePath)) {
+                    shapeNames.add(filePath.getFileName().toString().replace(".json", ""));
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        int idx = new Random().nextInt(shapeNames.size());
+
+        Shape loadedShape = Shape.loadShape(shapeNames.get(idx));
+
+        List<Brick> bricks = loadedShape.getBricks();
+
+        for (int i = 0; i < bricks.size(); i++) {
+            Mesh mesh = this.brickOutlines.get(bricks.get(i).getBrickId());
+            Color color = new Color(this.materials.get(bricks.get(i).getMaterialId()).getMainColor());
+            color.setAlpha(128);
+            Material material = MaterialFactory.getDefaultMaterial();
+            material.setMainColor(color);
+
+            GameObject gameObject = new GameObject("CorrectBrick:" + i + 1);
+            MeshRenderer renderer = gameObject.addComponent(new MeshRenderer());
+            renderer.setMesh(mesh);
+            renderer.setMaterial(material);
+
+            gameObject.getTransform().setPosition(bricks.get(i).getPosition());
+            gameObject.getTransform().setRotation(bricks.get(i).getRotation());
+            gameObject.setParent(GameObject.findGameObject("Scene"));
+            this.correctBricks.add(gameObject);
+        }
 
         player.getGameObject().setActive(true);
         player.reset();
@@ -38,6 +96,7 @@ public class GameManager extends Behavior {
     }
 
     public void newEmptyScene() {
+        reset();
 
         player.getGameObject().setActive(true);
         player.reset();
@@ -91,10 +150,13 @@ public class GameManager extends Behavior {
 
         Path path = Paths.get("shapes/" + name + ".json");
 
-        if(!Files.exists(path)) {
+        if(!path.toFile().exists()) {
             JOptionPane.showMessageDialog(null, "Shape with that name does not exist!");
             return;
         }
+
+        player.getGameObject().setActive(true);
+        player.reset();
 
         Shape loadedShape = Shape.loadShape(name);
 
@@ -114,9 +176,6 @@ public class GameManager extends Behavior {
             gameObject.setParent(GameObject.findGameObject("Plate"));
             player.getBricks().add(gameObject);
         }
-
-        player.getGameObject().setActive(true);
-
     }
 
     @Override
