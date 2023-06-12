@@ -24,6 +24,10 @@ public class Game implements IGame {
             gameManager.newGame();
         });
 
+        Engine.getEvents().subscribe("finishGame", (args) -> {
+            gameManager.finishGame();
+        });
+
         Engine.getEvents().subscribe("newEmptyScene", (args) -> {
             gameManager.newEmptyScene();
         });

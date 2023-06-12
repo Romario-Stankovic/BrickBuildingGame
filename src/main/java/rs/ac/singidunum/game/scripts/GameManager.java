@@ -96,6 +96,29 @@ public class GameManager extends Behavior {
 
     }
 
+    public void finishGame() {
+
+        List<Brick> playerBricks = player.getBricks();
+
+        int count = 0;
+
+        for(Brick correctBrick : correctBricks) {
+
+            for(Brick playerBrick : playerBricks) {
+
+                if(correctBrick.equals(playerBrick)) {
+                    count++;
+                    break;
+                }
+
+            }
+
+        }
+
+        JOptionPane.showMessageDialog(null, "Count: " + count, null, 0);
+
+    }
+
     public void newEmptyScene() {
         reset();
 
@@ -178,15 +201,19 @@ public class GameManager extends Behavior {
 
         Mesh brick2x2 = ModelLoader.load("/models/brick_2x2.obj");
         Mesh brick2x4 = ModelLoader.load("/models/brick_2x4.obj");
+        Mesh brick2x8 = ModelLoader.load("/models/brick_2x8.obj");
 
         Mesh brick2x2Outline = ModelLoader.load("/models/brick_2x2_outline.obj");
         Mesh brick2x4Outline = ModelLoader.load("/models/brick_2x4_outline.obj");
+        Mesh brick2x8Outline = ModelLoader.load("/models/brick_2x8_outline.obj");
 
         this.bricks.add(brick2x2);
         this.bricks.add(brick2x4);
+        this.bricks.add(brick2x8);
 
         this.brickOutlines.add(brick2x2Outline);
         this.brickOutlines.add(brick2x4Outline);
+        this.brickOutlines.add(brick2x8Outline);
 
         Material red = MaterialFactory.getDefaultMaterial();
         red.setMainColor(new Color(221, 25, 32));

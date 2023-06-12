@@ -30,18 +30,28 @@ public class Main
         JMenuBar menu = new JMenuBar();
         // Initialize the Game menu
         JMenu gameItem = new JMenu("Game");
+        JMenu editorItem = new JMenu("Editor");
         // Add Exit option to the Game menu
         JMenuItem newGameItem = new JMenuItem("New Game");
-        JMenu editorItem = new JMenu("Editor");
-        JMenuItem newEmptyScene = new JMenuItem("New Editor");
-        JMenuItem saveShapeItem = new JMenuItem("Save Shape");
-        JMenuItem loadShapeItem = new JMenuItem("Load Shape");
+        JMenuItem finishGameItem = new JMenuItem("Finish Game");
         JMenuItem optionsItem = new JMenuItem("Options");
         JMenuItem helpItem = new JMenuItem("Help");
         JMenuItem quitItem = new JMenuItem("Quit");
 
+        JMenuItem newEmptyScene = new JMenuItem("New Editor");
+        JMenuItem saveShapeItem = new JMenuItem("Save Shape");
+        JMenuItem loadShapeItem = new JMenuItem("Load Shape");
+
         newGameItem.addActionListener(e -> {
             Engine.getEvents().emit("newGame");
+        });
+
+        finishGameItem.addActionListener(e -> {
+            Engine.getEvents().emit("finishGame");
+        });
+
+        quitItem.addActionListener(e -> {
+            System.exit(0);
         });
 
         newEmptyScene.addActionListener(e -> {
@@ -56,15 +66,13 @@ public class Main
             Engine.getEvents().emit("loadShape");
         });
 
-        quitItem.addActionListener(e -> {
-            System.exit(0);
-        });
 
         editorItem.add(newEmptyScene);
         editorItem.add(saveShapeItem);
         editorItem.add(loadShapeItem);
 
         gameItem.add(newGameItem);
+        gameItem.add(finishGameItem);
         gameItem.add(optionsItem);
         gameItem.add(helpItem);
         gameItem.add(quitItem);
