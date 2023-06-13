@@ -35,7 +35,7 @@ public class Material {
     }
 
     public void apply() {
-        GL2 gl = Engine.getDrawable().getGL().getGL2();
+        GL2 gl = Engine.getInstance().getDrawable().getGL().getGL2();
 
         Color ambient = Color.multiply(mainColor, ambientColor);
         Color diffuse = Color.multiply(mainColor, diffuseColor);

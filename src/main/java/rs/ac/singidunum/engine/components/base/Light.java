@@ -10,21 +10,21 @@ public abstract class Light extends Behavior {
 
     public Light() {
         lightNumber = lightCount++;
-        if(lightNumber > Engine.getMaxLights()) {
+        if(lightNumber > Engine.getInstance().getMaxLights()) {
             throw new RuntimeException("Too many lights!");
         }
     }
 
     @Override
     public void start() {
-        GL2 gl = Engine.getDrawable().getGL().getGL2();
+        GL2 gl = Engine.getInstance().getDrawable().getGL().getGL2();
         gl.glEnable(GL2.GL_LIGHT0 + lightNumber);
     }
 
     @Override
     public void update(double delta) {
 
-        GL2 gl = Engine.getDrawable().getGL().getGL2();
+        GL2 gl = Engine.getInstance().getDrawable().getGL().getGL2();
 
         float[] position = {
             (float)getTransform().getPosition().getX(),

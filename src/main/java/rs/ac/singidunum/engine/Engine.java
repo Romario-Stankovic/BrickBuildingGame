@@ -11,25 +11,32 @@ import javax.swing.*;
 
 public class Engine implements GLEventListener {
 
-    private final GLCanvas canvas;
-    private final FPSAnimator animator;
-
     @Getter
-    private static GLAutoDrawable drawable;
+    private static Engine instance;
 
-    @Getter
-    private static int maxLights = 0;
-
-    private static final int FPS = 60;
-
-    private long lastTimestamp;
-
+    private GLCanvas canvas;
+    private FPSAnimator animator;
     private IGame game;
 
     @Getter
-    private static final Events events = new Events();
+    private JFrame frame;
 
-    public Engine() {
+    @Getter
+    private GLAutoDrawable drawable;
+    @Getter
+    private EventManager eventManager = new EventManager();
+    @Getter
+    private int maxLights = 0;
+
+    private int FPS = 60;
+
+    private long lastTimestamp;
+
+    public Engine(JFrame frame, IGame game) {
+
+        if(instance != null) {
+            return;
+        }
 
         GLProfile profile = GLProfile.getDefault();
         GLCapabilities capabilities = new GLCapabilities(profile);
@@ -47,16 +54,15 @@ public class Engine implements GLEventListener {
         canvas.addMouseMotionListener(Input.instance);
         canvas.addMouseWheelListener(Input.instance);
 
-        lastTimestamp = System.currentTimeMillis();
-    }
-
-    public void attach(JFrame frame) {
         canvas.setPreferredSize(frame.getSize());
         frame.add(canvas);
-    }
-
-    public void register(IGame game) {
+        this.frame = frame;
         this.game = game;
+
+        lastTimestamp = System.currentTimeMillis();
+
+        instance = this;
+
     }
 
     public void start() {
@@ -97,13 +103,13 @@ public class Engine implements GLEventListener {
     public void init(GLAutoDrawable drawable) {
 
         // Set the static drawable variable
-        Engine.drawable = drawable;
+        this.drawable = drawable;
 
         // Get the maximum number of lights
         int[] maxLights = new int[1];
         GL2 gl = drawable.getGL().getGL2();
         gl.glGetIntegerv(GL2.GL_MAX_LIGHTS, maxLights, 0);
-        Engine.maxLights = maxLights[0];
+        this.maxLights = maxLights[0];
 
         // Disable default ambient light
         gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, new float[]{0f,0f,0f,0f}, 0);

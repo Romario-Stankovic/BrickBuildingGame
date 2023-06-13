@@ -100,14 +100,14 @@ public class GameManager extends Behavior {
 
         List<Brick> playerBricks = player.getBricks();
 
-        int count = 0;
+        int matched = 0;
 
         for(Brick correctBrick : correctBricks) {
 
             for(Brick playerBrick : playerBricks) {
 
                 if(correctBrick.equals(playerBrick)) {
-                    count++;
+                    matched++;
                     break;
                 }
 
@@ -115,7 +115,16 @@ public class GameManager extends Behavior {
 
         }
 
-        JOptionPane.showMessageDialog(null, "Count: " + count, null, 0);
+        int totalCorrect = correctBricks.size();
+        int totalPlaced = playerBricks.size();
+        int misplaced = (totalPlaced - matched);
+
+        int total = (totalCorrect + misplaced);
+        double score = ((double)matched / total) * 100;
+
+        String message = String.format("Score: %f/100\nCorrect:%d\nMisplaced:%d", score, matched, misplaced);
+
+        JOptionPane.showMessageDialog(null, message, null, JOptionPane.INFORMATION_MESSAGE);
 
     }
 

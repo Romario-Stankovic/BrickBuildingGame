@@ -31,7 +31,7 @@ public class AmbientLight extends Light {
     public void update(double delta) {
         super.update(delta);
 
-        GL2 gl = Engine.getDrawable().getGL().getGL2();
+        GL2 gl = Engine.getInstance().getDrawable().getGL().getGL2();
         int LIGHT = GL2.GL_LIGHT0 + lightNumber;
 
         float[] a = {

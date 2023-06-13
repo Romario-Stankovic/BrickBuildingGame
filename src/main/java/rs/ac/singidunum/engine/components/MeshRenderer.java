@@ -38,7 +38,7 @@ public class MeshRenderer extends Behavior implements IRenderable {
 
     @Override
     public void update(double delta) {
-        this.render(Engine.getDrawable());
+        this.render(Engine.getInstance().getDrawable());
     }
 
 

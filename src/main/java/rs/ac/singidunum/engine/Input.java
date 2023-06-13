@@ -14,9 +14,9 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
     @Getter
     private static int mouseY = 0;
 
-    private static final Events keyEvents = new Events();
-    private static final Events mouseEvents = new Events();
-    private static final Events mouseWheelEvents = new Events();
+    private static final EventManager keyEvents = new EventManager();
+    private static final EventManager mouseEvents = new EventManager();
+    private static final EventManager mouseWheelEvents = new EventManager();
 
     public static void onKeyDown(Short keyCode, ICallback callback) {
         keyEvents.subscribe(keyCode.toString() + "down", callback);

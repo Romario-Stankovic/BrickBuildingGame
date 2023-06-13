@@ -55,7 +55,7 @@ public class Camera extends Behavior {
     }
 
     public void render(OnRenderCallback callback) {
-        GLAutoDrawable drawable = Engine.getDrawable();
+        GLAutoDrawable drawable = Engine.getInstance().getDrawable();
         GL2 gl = drawable.getGL().getGL2();
 
         double aspect = (double)drawable.getSurfaceWidth() / (double)drawable.getSurfaceHeight();

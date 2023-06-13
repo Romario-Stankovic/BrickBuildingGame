@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Events {
+public class EventManager {
     private final Map<Object, List<ICallback>> events = new HashMap<>();
 
     public void subscribe(String event, ICallback callback) {
