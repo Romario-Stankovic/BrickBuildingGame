@@ -61,6 +61,10 @@ public class Game implements IGame {
             Engine.getInstance().getEventManager().emit("finishGame");
         });
 
+        helpItem.addActionListener(e -> {
+            Engine.getInstance().getEventManager().emit("showHelp");
+        });
+
         quitItem.addActionListener(e -> {
             System.exit(0);
         });
@@ -93,6 +97,10 @@ public class Game implements IGame {
 
         Engine.getInstance().getEventManager().subscribe("finishGame", (args) -> {
             gameManager.finishGame();
+        });
+
+        Engine.getInstance().getEventManager().subscribe("showHelp", (args) -> {
+            gameManager.showHelp();
         });
 
         Engine.getInstance().getEventManager().subscribe("newEmptyScene", (args) -> {

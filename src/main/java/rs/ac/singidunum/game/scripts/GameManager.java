@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import lombok.Getter;
+import rs.ac.singidunum.engine.Engine;
 import rs.ac.singidunum.engine.components.GameObject;
 import rs.ac.singidunum.engine.components.MeshRenderer;
 import rs.ac.singidunum.engine.components.base.Behavior;
@@ -122,9 +123,37 @@ public class GameManager extends Behavior {
         int total = (totalCorrect + misplaced);
         double score = ((double)matched / total) * 100;
 
-        String message = String.format("Score: %f/100\nCorrect:%d\nMisplaced:%d", score, matched, misplaced);
+        String message = String.format("Score: %d/100\nCorrect: %d/%d\nMisplaced: %d", (int)score, matched, totalCorrect, misplaced);
 
-        JOptionPane.showMessageDialog(null, message, null, JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(Engine.getInstance().getFrame(), message, null, JOptionPane.INFORMATION_MESSAGE);
+ 
+    }
+
+    public void showHelp() {
+
+        String message = 
+        "<html>"
+        +   "<body>"
+        +       "<div width='250px'>"
+        +           "<p align='center'>----- Computer Graphics Final Exam -----</p><br>"
+        +           "<p>Created by: Romario Stanković - 2020230210<p><br>"
+        +           "<br>"
+        +           "<p align='center'>----- HOW TO PLAY -----<p>"
+        +           "<p>W/A/S/D - Move the player left/right/forward/backward</p>"
+        +           "<p>Q/E - Move the player up/down</p>"
+        +           "<p>1/2 - Switch between bricks</p>"
+        +           "<p>3/4 - Switch between colors</p>"
+        +           "<p>R - Remove the last placed brick</p>"
+        +           "<p>Space - Place the current selected brick</p>"
+        +           "<p>LMB + Mouse - Orbit the camera around the scene</p>"
+        +           "<p>Mouse Wheel - Zoom in/out</p>"
+        +       "</div>"
+        +   "</body>"
+        +"</html>";
+
+        JLabel label = new JLabel(message);
+
+        JOptionPane.showMessageDialog(Engine.getInstance().getFrame(), label, "Help", JOptionPane.INFORMATION_MESSAGE);
 
     }
 
@@ -138,10 +167,7 @@ public class GameManager extends Behavior {
 
     public void saveShape() {
 
-        JFrame frame = new JFrame("Shape name");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        String name = JOptionPane.showInputDialog(frame, "Enter shape name:");
-        frame.dispose();
+        String name = JOptionPane.showInputDialog(Engine.getInstance().getFrame(), "Enter shape name:");
 
         if (name == null) {
             return;
@@ -167,15 +193,16 @@ public class GameManager extends Behavior {
 
     public void loadShape() {
 
-        JFrame frame = new JFrame("Shape name");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        String name = JOptionPane.showInputDialog(frame, "Enter shape name:");
-        frame.dispose();
+        String name = JOptionPane.showInputDialog(Engine.getInstance().getFrame(), "Enter shape name:");
+
+        if(name == null) {
+            return;
+        }
 
         Path path = Paths.get("shapes/" + name + ".json");
 
         if(!path.toFile().exists()) {
-            JOptionPane.showMessageDialog(null, "Shape with that name does not exist!");
+            JOptionPane.showMessageDialog(Engine.getInstance().getFrame(), "Shape with that name does not exist!");
             return;
         }
 
