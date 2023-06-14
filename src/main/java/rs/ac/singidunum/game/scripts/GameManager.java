@@ -19,6 +19,7 @@ import rs.ac.singidunum.engine.util.Color;
 import rs.ac.singidunum.engine.util.Material;
 import rs.ac.singidunum.engine.util.Mesh;
 import rs.ac.singidunum.engine.util.ModelLoader;
+import rs.ac.singidunum.engine.util.Vector3;
 import rs.ac.singidunum.game.scripts.factories.MaterialFactory;
 
 public class GameManager extends Behavior {
@@ -41,7 +42,7 @@ public class GameManager extends Behavior {
         }
 
         correctBricks.clear();
-
+        player.getGameObject().setActive(true);
         player.reset();
     }
 
@@ -87,13 +88,11 @@ public class GameManager extends Behavior {
 
             gameObject.getTransform().setPosition(bricks.get(i).getPosition());
             gameObject.getTransform().setRotation(bricks.get(i).getRotation());
+            gameObject.getTransform().setScale(new Vector3(0.99, 0.99, 0.99));
             gameObject.setParent(GameObject.findGameObject("Scene"));
             bricks.get(i).setGameObject(gameObject);
             this.correctBricks.add(bricks.get(i));
         }
-
-        player.getGameObject().setActive(true);
-        player.reset();
 
     }
 
@@ -127,6 +126,8 @@ public class GameManager extends Behavior {
 
         JOptionPane.showMessageDialog(Engine.getInstance().getFrame(), message, null, JOptionPane.INFORMATION_MESSAGE);
  
+        player.getGameObject().setActive(false);
+
     }
 
     public void showHelp() {
@@ -160,10 +161,6 @@ public class GameManager extends Behavior {
 
     public void newEmptyScene() {
         reset();
-
-        player.getGameObject().setActive(true);
-        player.reset();
-
     }
 
     public void saveShape() {
@@ -208,8 +205,6 @@ public class GameManager extends Behavior {
         }
 
         reset();
-        player.getGameObject().setActive(true);
-        player.reset();
 
         Shape loadedShape = Shape.loadShape(name);
 

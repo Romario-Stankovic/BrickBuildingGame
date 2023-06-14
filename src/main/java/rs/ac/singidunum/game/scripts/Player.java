@@ -29,26 +29,44 @@ public class Player extends Behavior {
     private void initializeInput() {
 
         Input.onKeyDown(KeyEvent.VK_A, (args) -> {
+            if(this.getTransform().getPosition().getX() <= -8) {
+                return;
+            }
             this.getTransform().getPosition().add(new Vector3(-1, 0, 0));
         });
 
         Input.onKeyDown(KeyEvent.VK_D, (args) -> {
+            if(this.getTransform().getPosition().getX() >= 8) {
+                return;
+            }
             this.getTransform().getPosition().add(new Vector3(1, 0, 0));
         });
 
         Input.onKeyDown(KeyEvent.VK_W, (args) -> {
+            if(this.getTransform().getPosition().getZ() <= -8) {
+                return;
+            }
             this.getTransform().getPosition().add(new Vector3(0, 0, -1));
         });
 
         Input.onKeyDown(KeyEvent.VK_S, (args) -> {
+            if(this.getTransform().getPosition().getZ() >= 8) {
+                return;
+            }
             this.getTransform().getPosition().add(new Vector3(0, 0, 1));
         });
 
         Input.onKeyDown(KeyEvent.VK_Q, (args) -> {
+            if(this.getTransform().getPosition().getY() <= 1.2) {
+                return;
+            }
             this.getTransform().getPosition().add(new Vector3(0, -1.2, 0));
         });
 
         Input.onKeyDown(KeyEvent.VK_E, (args) -> {
+            if(this.getTransform().getPosition().getY() >= 12) {
+                return;
+            }
             this.getTransform().getPosition().add(new Vector3(0, 1.2, 0));
         });
 
@@ -109,6 +127,10 @@ public class Player extends Behavior {
     }
 
     private void placeCurrentBrick() {
+
+        if(!getGameObject().isActive()) {
+            return;
+        }
 
         Mesh brickMesh = this.gameManager.getBricks().get(brickId);
         Material placedMaterial = this.gameManager.getMaterials().get(materialId);
@@ -174,7 +196,7 @@ public class Player extends Behavior {
 
         Mesh mesh = gameManager.getBricks().get(brickId);
         Color color = new Color(gameManager.getMaterials().get(materialId).getMainColor());
-        color.setAlpha(160);
+        color.setAlpha(180);
         Material material = MaterialFactory.getDefaultMaterial();
         material.setMainColor(color);
 
