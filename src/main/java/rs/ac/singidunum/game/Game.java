@@ -135,8 +135,8 @@ public class Game implements IGame {
         ambientLight.setParent(scene);
 
         GameObject directionalLight = new GameObject("Directional Light");
-        directionalLight.addComponent(new DirectionalLight());
-        directionalLight.getTransform().setPosition(new Vector3(0, 1, -1));
+        DirectionalLight light = directionalLight.addComponent(new DirectionalLight());
+        light.setDirection(new Vector3(0.5, 1, -1));
         directionalLight.setParent(scene);
 
         // Initialize pivot

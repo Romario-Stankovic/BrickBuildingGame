@@ -32,7 +32,7 @@ public class Player extends Behavior {
             if(this.getTransform().getPosition().getX() <= -8) {
                 return;
             }
-            this.getTransform().getPosition().add(new Vector3(-1, 0, 0));
+            this.getTransform().move(new Vector3(-1, 0, 0));
         });
 
         Input.onKeyDown(KeyEvent.VK_D, (args) -> {
