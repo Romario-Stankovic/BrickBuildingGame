@@ -1,7 +1,7 @@
 package rs.ac.singidunum.game.scripts;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.jogamp.newt.event.KeyEvent;
 
@@ -24,7 +24,7 @@ public class Player extends Behavior {
     private GameManager gameManager = null;
 
     @Getter
-    private final List<Brick> bricks = new CopyOnWriteArrayList<>();
+    private final List<Brick> bricks = new LinkedList<>();
 
     private void initializeInput() {
 
@@ -100,11 +100,9 @@ public class Player extends Behavior {
                 return;
             }
 
-            Brick brick = this.bricks.get(this.bricks.size() - 1);
+            Brick brick = this.bricks.remove(this.bricks.size() - 1);
 
             brick.getGameObject().destroy();
-
-            this.bricks.remove(brick);
 
         });
 
