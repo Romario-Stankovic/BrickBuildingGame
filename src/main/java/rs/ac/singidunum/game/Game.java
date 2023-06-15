@@ -16,26 +16,28 @@ import rs.ac.singidunum.game.scripts.factories.MaterialFactory;
 
 public class Game implements IGame {
 
+    // Reference to the main camera
     private Camera mainCamera;
+    // Reference to the scene gameObject
     private GameObject scene;
 
     public void initUI() {
         // Initialize the Menu bar
         JMenuBar menu = new JMenuBar();
 
-        // Menu
+        // Menu bar items
         JMenu gameItem = new JMenu("Game");
         JMenu editorItem = new JMenu("Editor");
 
-        // Menu -> Game
+        // Menu -> Game items
         JMenuItem newGameItem = new JMenuItem("New Game");
         JMenuItem finishGameItem = new JMenuItem("Finish Game");
         JMenuItem optionsItem = new JMenuItem("Options");
         JMenuItem helpItem = new JMenuItem("Help");
         JMenuItem quitItem = new JMenuItem("Quit");
 
-        // Menu -> Editor
-        JMenuItem newEmptyScene = new JMenuItem("New Editor");
+        // Menu -> Editor items
+        JMenuItem newEditorItem = new JMenuItem("New Editor");
         JMenuItem saveShapeItem = new JMenuItem("Save Shape");
         JMenuItem loadShapeItem = new JMenuItem("Load Shape");
 
@@ -43,74 +45,90 @@ public class Game implements IGame {
         menu.add(gameItem);
         menu.add(editorItem);
 
+        // Add the game items
         gameItem.add(newGameItem);
         gameItem.add(finishGameItem);
         gameItem.add(optionsItem);
         gameItem.add(helpItem);
         gameItem.add(quitItem);
 
-        editorItem.add(newEmptyScene);
+        // Add the editor items
+        editorItem.add(newEditorItem);
         editorItem.add(saveShapeItem);
         editorItem.add(loadShapeItem);
 
         newGameItem.addActionListener(e -> {
+            // Emit newGame event
             Engine.getInstance().getEventManager().emit("newGame");
         });
 
         finishGameItem.addActionListener(e -> {
+            // Emit finishGame event
             Engine.getInstance().getEventManager().emit("finishGame");
         });
 
         helpItem.addActionListener(e -> {
+            // Emit showHelp event
             Engine.getInstance().getEventManager().emit("showHelp");
         });
 
         quitItem.addActionListener(e -> {
+            // Exit the application
             System.exit(0);
         });
 
-        newEmptyScene.addActionListener(e -> {
-            Engine.getInstance().getEventManager().emit("newEmptyScene");
+        newEditorItem.addActionListener(e -> {
+            // Emit newEditor event
+            Engine.getInstance().getEventManager().emit("newEditor");
         });
 
         saveShapeItem.addActionListener(e -> {
+            // Emit saveShape event
             Engine.getInstance().getEventManager().emit("saveShape");
         });
 
         loadShapeItem.addActionListener(e -> {
+            // Emit loadShape event
             Engine.getInstance().getEventManager().emit("loadShape");
         });
 
-        // Update the Frame
+        // Add menu bar to the frame
         Engine.getInstance().getFrame().setJMenuBar(menu);
+        // Re-render the window
         SwingUtilities.updateComponentTreeUI(Engine.getInstance().getFrame());
 
     }
 
     public void initGame() {
+        // Create a gameManager
         GameManager gameManager = new GameManager();
 
-        // Initialize listeners
+        // Initialize newGame listener
         Engine.getInstance().getEventManager().subscribe("newGame", (args) -> {
             gameManager.newGame();
         });
 
+        // Initialize finishGame listener
         Engine.getInstance().getEventManager().subscribe("finishGame", (args) -> {
             gameManager.finishGame();
         });
 
+        // Initialize showHelp listener
         Engine.getInstance().getEventManager().subscribe("showHelp", (args) -> {
             gameManager.showHelp();
         });
 
-        Engine.getInstance().getEventManager().subscribe("newEmptyScene", (args) -> {
-            gameManager.newEmptyScene();
+        // Initialize newEditor listener
+        Engine.getInstance().getEventManager().subscribe("newEditor", (args) -> {
+            gameManager.newEditor();
         });
 
+        // Initialize saveShape listener
         Engine.getInstance().getEventManager().subscribe("saveShape", (args) -> {
             gameManager.saveShape();
         });
 
+        // Initialize loadShape listener
         Engine.getInstance().getEventManager().subscribe("loadShape", (args) -> {
             gameManager.loadShape();
         });
@@ -169,13 +187,17 @@ public class Game implements IGame {
 
     @Override
     public void init() {
+        // Initialize the UI
         initUI();
+        // Initialize the Game
         initGame();
     }
 
     @Override
     public void update(double delta) {
+        // Call render on the camera
         mainCamera.render(() -> {
+            // Update the scene when camera is ready
             scene.update(delta);
         });
     }
