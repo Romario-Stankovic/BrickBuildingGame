@@ -1,6 +1,7 @@
 package rs.ac.singidunum.game;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -54,6 +55,7 @@ public class Game implements IGame {
         frame.setLocationRelativeTo(Engine.getInstance().getFrame());
         frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setIconImage(new ImageIcon(Object.class.getResource("/textures/icon.png")).getImage());
 
         fovPanel.setLayout(new BoxLayout(fovPanel, BoxLayout.X_AXIS));
         fovPanel.add(fovLabel);

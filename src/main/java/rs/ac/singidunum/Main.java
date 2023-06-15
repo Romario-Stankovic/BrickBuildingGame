@@ -17,9 +17,10 @@ public class Main
     public static void main( String[] args )
     {
         // Initialize the window
-        JFrame frame = new JFrame("Game");
+        JFrame frame = new JFrame("Lego Game");
         frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setIconImage(new ImageIcon(Object.class.getResource("/textures/icon.png")).getImage());
 
         // Create a new game instance
         IGame game = new Game();
