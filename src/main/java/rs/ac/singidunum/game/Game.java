@@ -33,6 +33,7 @@ public class Game implements IGame {
         int fov = Settings.get("fov", Integer.class);
         boolean ambientLight = Settings.get("ambientLight", Boolean.class);
         boolean directionalLight = Settings.get("directionalLight", Boolean.class);
+        double sensitivity = Settings.get("sensitivity", Double.class);
 
         final JFrame frame = new JFrame();
 
@@ -46,15 +47,25 @@ public class Game implements IGame {
         final JPanel directionalLightPanel = new JPanel();
         final JCheckBox directionalLightCheckBox = new JCheckBox("Directional Light", directionalLight);
 
+        final JPanel sensitivityPanel = new JPanel();
+        final JLabel sensitivityLabel = new JLabel("Sensitivity: " + (int)(sensitivity * 100));
+        final JSlider sensitivitySlider = new JSlider(1, 100, (int)(sensitivity * 100));
+
         frame.setLocationRelativeTo(Engine.getInstance().getFrame());
         frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         fovPanel.setLayout(new BoxLayout(fovPanel, BoxLayout.X_AXIS));
         fovPanel.add(fovLabel);
         fovPanel.add(fovSlider);
 
         ambientLightPanel.add(ambientLightCheckBox);
+        
         directionalLightPanel.add(directionalLightCheckBox);
+
+        sensitivityPanel.setLayout(new BoxLayout(sensitivityPanel, BoxLayout.X_AXIS));
+        sensitivityPanel.add(sensitivityLabel);
+        sensitivityPanel.add(sensitivitySlider);
 
         fovSlider.addChangeListener(e -> {
             Settings.set("fov", fovSlider.getValue());
@@ -69,7 +80,13 @@ public class Game implements IGame {
             Settings.set("directionalLight", directionalLightCheckBox.isSelected());
         });
 
+        sensitivitySlider.addChangeListener(e -> {
+            Settings.set("sensitivity", sensitivitySlider.getValue() / 100.0);
+            sensitivityLabel.setText("Sensitivity: " + sensitivitySlider.getValue());
+        });
+
         frame.add(fovPanel);
+        frame.add(sensitivityPanel);
         frame.add(ambientLightPanel);
         frame.add(directionalLightPanel);
 
@@ -83,6 +100,7 @@ public class Game implements IGame {
         Settings.set("fov", 60);
         Settings.set("ambientLight", true);
         Settings.set("directionalLight", true);
+        Settings.set("sensitivity", 0.1);
 
     }
 

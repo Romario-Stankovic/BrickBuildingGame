@@ -1,6 +1,7 @@
 package rs.ac.singidunum.game.scripts;
 
 import rs.ac.singidunum.engine.Input;
+import rs.ac.singidunum.engine.Settings;
 import rs.ac.singidunum.engine.components.GameObject;
 import rs.ac.singidunum.engine.util.Mathf;
 import rs.ac.singidunum.engine.components.base.Behavior;
@@ -20,7 +21,7 @@ public class MouseLook extends Behavior {
     private int zoom = -30;
 
     // Define the speeds of the orbit an zoom
-    private double orbitSpeed = 0.1;
+    private double sensitivity = 0.1;
     private double zoomSpeed = 1;
 
     // Define can the camera orbit
@@ -69,13 +70,15 @@ public class MouseLook extends Behavior {
         lastX = x;
         lastY = y;
 
+        sensitivity = Settings.get("sensitivity", Double.class);
+
         // Set the cameras zoom
         camera.getTransform().getPosition().setZ(zoom);
 
         // If the camera canOrbit
         if(canOrbit) {
             // Set the rotation of the camera based on the mouse movement
-            getTransform().getRotation().add(new Vector3(dy * orbitSpeed, dx * orbitSpeed, 0));
+            getTransform().getRotation().add(new Vector3(dy * sensitivity, dx * sensitivity, 0));
         }
 
 
