@@ -1,7 +1,6 @@
 package rs.ac.singidunum.engine.components;
 
 import lombok.Getter;
-import lombok.Setter;
 import rs.ac.singidunum.engine.components.base.Behavior;
 
 import java.util.HashMap;
@@ -19,7 +18,6 @@ public class GameObject {
 
     // Is the GameObject active
     @Getter
-    @Setter
     private boolean active;
 
     // Has the GameObject started 
@@ -42,6 +40,23 @@ public class GameObject {
 
     // Map of all GameObjects in the game
     private static Map<String, GameObject> gameObjects = new HashMap<>();
+
+    // Active setter
+    public void setActive(boolean active) {
+        if(active == this.active) {
+            return;
+        }
+
+        for (Behavior component : components) {
+            if(active) {
+                component.onEnable();
+            } else {
+                component.onDisable();
+            }
+        }
+
+        this.active = active;
+    }
 
     // GameObject constructor
     public GameObject(String name) {

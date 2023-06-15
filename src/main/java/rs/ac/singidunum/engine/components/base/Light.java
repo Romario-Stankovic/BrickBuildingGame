@@ -51,4 +51,20 @@ public abstract class Light extends Behavior {
 
     }
 
+    @Override
+    public void onEnable() {
+        final GL2 gl = Engine.getInstance().getDrawable().getGL().getGL2();
+        // Enable the light
+        gl.glEnable(GL2.GL_LIGHT0 + lightNumber);
+    }
+
+    @Override
+    public void onDisable() {
+
+        final GL2 gl = Engine.getInstance().getDrawable().getGL().getGL2();
+        // Enable the light
+        gl.glDisable(GL2.GL_LIGHT0 + lightNumber);
+
+    }
+
 }

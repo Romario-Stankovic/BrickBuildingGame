@@ -1,11 +1,18 @@
 package rs.ac.singidunum.game;
 
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 
 import rs.ac.singidunum.engine.Engine;
+import rs.ac.singidunum.engine.Settings;
 import rs.ac.singidunum.engine.components.*;
 import rs.ac.singidunum.engine.util.*;
 import rs.ac.singidunum.engine.interfaces.IGame;
@@ -21,7 +28,65 @@ public class Game implements IGame {
     // Reference to the scene gameObject
     private GameObject scene;
 
-    public void initUI() {
+    private void openSettingsMenu() {
+
+        int fov = Settings.get("fov", Integer.class);
+        boolean ambientLight = Settings.get("ambientLight", Boolean.class);
+        boolean directionalLight = Settings.get("directionalLight", Boolean.class);
+
+        final JFrame frame = new JFrame();
+
+        final JPanel fovPanel = new JPanel();
+        final JLabel fovLabel = new JLabel("FOV: " + fov);
+        final JSlider fovSlider = new JSlider(30, 120, fov);
+
+        final JPanel ambientLightPanel = new JPanel();
+        final JCheckBox ambientLightCheckBox = new JCheckBox("Ambient Lights", ambientLight);
+
+        final JPanel directionalLightPanel = new JPanel();
+        final JCheckBox directionalLightCheckBox = new JCheckBox("Directional Light", directionalLight);
+
+        frame.setLocationRelativeTo(Engine.getInstance().getFrame());
+        frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+
+        fovPanel.setLayout(new BoxLayout(fovPanel, BoxLayout.X_AXIS));
+        fovPanel.add(fovLabel);
+        fovPanel.add(fovSlider);
+
+        ambientLightPanel.add(ambientLightCheckBox);
+        directionalLightPanel.add(directionalLightCheckBox);
+
+        fovSlider.addChangeListener(e -> {
+            Settings.set("fov", fovSlider.getValue());
+            fovLabel.setText("FOV: " + fovSlider.getValue());
+        });
+
+        ambientLightCheckBox.addChangeListener(e -> {
+            Settings.set("ambientLight", ambientLightCheckBox.isSelected());
+        });
+
+        directionalLightCheckBox.addChangeListener(e -> {
+            Settings.set("directionalLight", directionalLightCheckBox.isSelected());
+        });
+
+        frame.add(fovPanel);
+        frame.add(ambientLightPanel);
+        frame.add(directionalLightPanel);
+
+        frame.pack();
+        frame.setVisible(true);
+
+    }
+
+    private void initSettings() {
+
+        Settings.set("fov", 60);
+        Settings.set("ambientLight", true);
+        Settings.set("directionalLight", true);
+
+    }
+
+    private void initUI() {
         // Initialize the Menu bar
         JMenuBar menu = new JMenuBar();
 
@@ -72,6 +137,10 @@ public class Game implements IGame {
             Engine.getInstance().getEventManager().emit("showHelp");
         });
 
+        optionsItem.addActionListener(e -> {
+            openSettingsMenu();
+        });
+
         quitItem.addActionListener(e -> {
             // Exit the application
             System.exit(0);
@@ -99,7 +168,7 @@ public class Game implements IGame {
 
     }
 
-    public void initGame() {
+    private void initGame() {
         // Create a gameManager
         GameManager gameManager = new GameManager();
 
@@ -187,6 +256,8 @@ public class Game implements IGame {
 
     @Override
     public void init() {
+        // Initialize settings
+        initSettings();
         // Initialize the UI
         initUI();
         // Initialize the Game
@@ -195,6 +266,13 @@ public class Game implements IGame {
 
     @Override
     public void update(double delta) {
+
+        // Get main camera FOV
+        mainCamera.setFov(Settings.get("fov", Integer.class));
+
+        GameObject.findGameObject("Ambient Light").setActive(Settings.get("ambientLight", Boolean.class));
+        GameObject.findGameObject("Directional Light").setActive(Settings.get("directionalLight", Boolean.class));
+
         // Call render on the camera
         mainCamera.render(() -> {
             // Update the scene when camera is ready

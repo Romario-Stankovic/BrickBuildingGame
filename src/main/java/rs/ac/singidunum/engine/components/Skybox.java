@@ -74,6 +74,12 @@ public class Skybox extends Behavior implements IRenderable {
         // Get the stack size
         final int stackSize = transforms.size();
 
+        // Get the value of alpha blending
+        boolean blending = gl.glIsEnabled(GL2.GL_BLEND);
+
+        // Disable alpha blending for the skybox
+        gl.glDisable(GL2.GL_BLEND);
+
         // Apply the material
         material.apply();
 
@@ -189,6 +195,11 @@ public class Skybox extends Behavior implements IRenderable {
 
         // Disable the texture
         material.getTexture().disable(gl);
+
+        // Re-enable blending
+        if(blending) {
+            gl.glEnable(GL2.GL_BLEND);
+        }
 
     }
 

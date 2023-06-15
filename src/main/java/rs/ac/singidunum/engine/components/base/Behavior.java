@@ -30,4 +30,8 @@ public abstract class Behavior {
 
     // Update is called every frame
     public abstract void update(double delta);
+
+    public void onEnable() {};
+    public void onDisable() {};
+
 }
