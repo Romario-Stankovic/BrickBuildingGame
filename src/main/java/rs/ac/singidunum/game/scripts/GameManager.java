@@ -177,16 +177,24 @@ public class GameManager extends Behavior {
         final int total = (correctCorrect + misplaced);
 
         // The score of the player
-        final double score = ((double)matched / total) * 100;
+        final int score = (int)((double)matched / total) * 100;
 
         // Message to be displayed
-        final String message = String.format("Score: %d/100\nCorrect: %d/%d\nMisplaced: %d", (int)score, matched, correctCorrect, misplaced);
+        final String message = String.format("Score: %d/100\nCorrect: %d/%d\nMisplaced: %d", score, matched, correctCorrect, misplaced);
 
         // Show a popup window with the message
         JOptionPane.showMessageDialog(Engine.getInstance().getFrame(), message, null, JOptionPane.INFORMATION_MESSAGE);
  
-        // Disable the player once the game ends
-        player.getGameObject().setActive(false);
+        // Show a popup for a new game
+        int choice = JOptionPane.showConfirmDialog(Engine.getInstance().getFrame(), "Do you wish to start a new game?", "New Game", JOptionPane.YES_OPTION);
+
+        // Start a new game if the player clicks yes
+        if(choice == 0) {
+            newGame();
+        }else {
+            // Disable the player once the game ends
+            player.getGameObject().setActive(false);
+        }
 
     }
 
