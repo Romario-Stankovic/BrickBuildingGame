@@ -177,7 +177,7 @@ public class GameManager extends Behavior {
         final int total = (correctCorrect + misplaced);
 
         // The score of the player
-        final int score = (int)((double)matched / total) * 100;
+        final int score = (int)(((double)matched / total) * 100);
 
         // Message to be displayed
         final String message = String.format("Score: %d/100\nCorrect: %d/%d\nMisplaced: %d", score, matched, correctCorrect, misplaced);
