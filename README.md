@@ -1,8 +1,8 @@
-<h1 align="center">LEGO Building Game</h1>
+<h1 align="center">Brick Building Game</h1>
 
-"LEGO Building Game" is a final exam project from the "Computer Graphics" course at Singidunum University. The course was designed to teach students the fundamentals of computer graphics using OpenGL and the Java programming language. 
+"Brick Building Game" is a final exam project from the "Computer Graphics" course at Singidunum University. The course was designed to teach students the fundamentals of computer graphics using OpenGL and the Java programming language. 
 
-For the project, we were tasked to create a 3D building game where players need to match a given shape using a predefined set of "LEGO Bricks" and colors.
+For the project, we were tasked to create a 3D building game where players need to match a given shape using a predefined set of Bricks and colors.
 
 ## 💡 Features
 
